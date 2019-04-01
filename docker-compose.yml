@@ -11,3 +11,13 @@ services:
       - '35729:35729'
     environment:
       - NODE_ENV=development
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    command: python manage.py runserver
+    volumes:
+      - ./server:/code
+    ports:
+      - '8000:8000'
