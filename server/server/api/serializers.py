@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from sprayer.models import Spray, SprayApplication
+from sprayer.models import Spray, SprayApplication, Owner, Field, FieldSeason
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,3 +36,21 @@ class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SprayApplication
         fields = ('cost', 'amount', 'spray')
+
+
+class OwnerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Owner
+        fields = ('name',)
+
+
+class FieldSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Field
+        fields = ('owner', 'name', 'user')
+
+
+class FieldSeasonSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = FieldSeason
+        fields = ('crop_type', 'num_acres', 'start_date', 'end_date', 'field')

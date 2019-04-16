@@ -22,6 +22,9 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'sprays', views.SprayViewSet)
 router.register(r'spray-applications', views.SprayApplicationViewSet)
+router.register(r'owners', views.OwnerViewSet)
+router.register(r'fields', views.FieldViewSet)
+router.register(r'field-seasons', views.FieldSeasonViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

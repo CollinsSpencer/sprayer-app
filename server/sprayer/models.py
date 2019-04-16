@@ -11,6 +11,9 @@ class Spray(models.Model):
 class Owner(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Field(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.PROTECT)
@@ -20,7 +23,7 @@ class Field(models.Model):
 
 class SprayApplication(models.Model):
     # COST_UNIT_CHOICES = (
-    #     (FLUID_OUNCES, 'Fluid Ouncesd'),
+    #     (FLUID_OUNCES, 'Fluid Ounces'),
     #     (GALLONS, 'Gallons'),
     #     (JUNIOR, 'Junior'),
     #     (SENIOR, 'Senior'),
