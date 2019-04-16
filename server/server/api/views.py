@@ -1,12 +1,10 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
+
 from server.api.serializers import UserSerializer, GroupSerializer, SpraySerializer, SprayApplicationSerializer, \
     OwnerSerializer, FieldSerializer, FieldSeasonSerializer
 from sprayer.models import Spray, SprayApplication, Owner, Field, FieldSeason
-from rest_framework import generics
 
 
 class UserViewSet(viewsets.ModelViewSet):
