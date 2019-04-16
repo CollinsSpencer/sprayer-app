@@ -6,14 +6,55 @@ import {
 import {
   Form,
   Col,
-  Container
+  Container,
+  Dropdown
 } from 'react-bootstrap'
 import BackButton from '../components/BackButton'
 import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
 import SpraySelector from '../components/SpraySelector'
+import UnitSelector from '../components/UnitSelector'
 
 class RecordPage extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      spray: '',
+      amount: '',
+      price: '',
+      unit: '',
+      items: []
+    }
+  };
+
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    let items = [...this.state.items];
+
+    items.push({
+      username: this.state.username,
+      password: this.state.password
+    });
+
+    this.setState({
+      items,
+      username: '',
+      password: ''
+    });
+  };
+
+  handleInputChange = (e) => {
+    let input = e.target;
+    let name = e.target.name;
+    let value = input.value;
+
+    this.setState({
+      [name]: value
+    })
+  };
+
   render() {
     return (
       <Container>
@@ -37,8 +78,12 @@ class RecordPage extends Component {
             </Col>
         	</Form.Row>
         	<Form.Row>
-            <Col md={{ span:6, offset:3 }}>
+            <Col>
       			 <SpraySelector></SpraySelector>
+            </Col>
+            <Col>
+              <Form.Label>Price</Form.Label>
+              <Form.Control type="number"/>
             </Col>
           </Form.Row>
           <Form.Row>
@@ -47,8 +92,7 @@ class RecordPage extends Component {
       				<Form.Control type="number"/>
       			</Col>
             <Col>
-              <Form.Label>Price</Form.Label>
-              <Form.Control type="number"/>
+              <UnitSelector></UnitSelector>
             </Col>
         	</Form.Row>
         </Form>
