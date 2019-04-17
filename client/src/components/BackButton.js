@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import {
+  Button
+} from 'react-bootstrap'
 
 class BackButton extends Component {
   render() {
     return (
-      <button
-        className="button icon-left"
-        onClick={this.props.history.goBack}>
+      <Button
+        variant="link"
+        onClick={(event) => this.handleClick(event)}>
           Back
-      </button>
+      </Button>
     )
+  }
+
+  handleClick(e) {
+    e.preventDefault()
+    this.props.history.goBack()
   }
 }
 

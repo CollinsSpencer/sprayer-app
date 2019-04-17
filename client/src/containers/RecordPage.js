@@ -40,19 +40,28 @@ class RecordPage extends Component {
             </Col>
         	</Form.Row>
           <SprayForm></SprayForm>
-          <Form.Row>
+          {/*<Form.Row>
             <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
               <Button variant="primary" onClick={this.addSpray}>Add Spray</Button>
             </Col>
-          </Form.Row>
+          </Form.Row>*/}
           <Form.Row>
             <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-              <button type="submit" value="Submit">Submit</button>
+              <Button 
+                type="submit"
+                variant="primary"
+                onClick={(event) => this.handleClick(event)}>
+                Submit
+              </Button>
             </Col>
           </Form.Row>
         </Form>
       </Container>
     )
+  }
+
+  handleClick(e) {
+    e.preventDefault()
   }
 }
 
