@@ -3,6 +3,7 @@ import uuidv4 from 'uuid'
 import {
   // Action types
   SET_MODE,
+  SET_UNITS,
   SET_FIELD,
   ADD_FIELD,
   SET_OWNER,
@@ -12,6 +13,7 @@ import {
 
   // Other Constants
   Modes,
+  Units,
 } from '../actions'
 
 // Updates mode
@@ -19,6 +21,15 @@ const mode = (state = Modes.SPRAYING, action) => {
   switch (action.type) {
     case SET_MODE:
       return action.mode
+    default:
+      return state
+  }
+}
+
+const unit = (state = Units.GALLONS, action) => {
+  switch (action.type) {
+    case SET_UNITS:
+      return action.unit
     default:
       return state
   }
@@ -98,6 +109,7 @@ const sprays = (state = [], action) => {
 
 const rootReducer = combineReducers({
   mode,
+  unit,
   field,
   fields,
   owner,

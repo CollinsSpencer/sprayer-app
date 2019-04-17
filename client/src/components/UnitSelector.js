@@ -5,13 +5,13 @@ import Select from 'react-select'
 
 import {
   setUnitsToGallons,
-  setUnitsToQuarts,
+  setUnitsToOunces,
   setUnitsToLiters,
 } from '../actions'
 
 const units = [
   { value: setUnitsToGallons, label: 'Gallons' },
-  { value: setUnitsToQuarts, label: 'Quarts' },
+  { value: setUnitsToOunces, label: 'Ounces' },
   { value: setUnitsToLiters, label: 'Liters' }
 ];
 
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setUnitsToGallons,
-  setUnitsToQuarts,
+  setUnitsToOunces,
   setUnitsToLiters,
 }
 
