@@ -1,32 +1,6 @@
+import fetch from 'cross-fetch'
+
 const BASE_URL = 'http://localhost:8000/api/'
-
-function callApi(endpoint, authenticated) {
-
-  let token = localStorage.getItem('access_token') || null
-  let config = {}
-
-  if(authenticated) {
-    if(token) {
-      config = {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }
-    }
-    else {
-      throw new Error('No token saved!');
-    }
-  }
-
-  return fetch(BASE_URL + endpoint, config)
-    .then(response =>
-      response.text().then(text => ({ text, response }))
-    ).then(({ text, response }) => {
-      if (!response.ok) {
-        return Promise.reject(text)
-      }
-
-      return text
-    }).catch(err => console.log(err))
-}
 
 export function NetworkError(response, status) {
   this.name = 'NetworkError';
@@ -36,7 +10,7 @@ export function NetworkError(response, status) {
 
 NetworkError.prototype = Error.prototype;
 
-const tryParseJSON = (json: string): ?{} => {
+const tryParseJSON = (json) => {
   if (!json) {
     return null;
   }
@@ -56,8 +30,14 @@ const getResponseBody = (res) => {
 };
 
 const apiEffect = (effect, action) => {
-  const { url, json, ...options } = effect;
-  const headers = { 'content-type': 'application/json', ...options.headers };
+  const { url, json, authenticated, ...options } = effect;
+  let token = localStorage.getItem('access_token') || null
+  let authHeader = (authenticated && token) ? { 'Authorization': `Bearer ${token}` } : {}
+  const headers = {
+    'content-type': 'application/json',
+    ...options.headers,
+    ...authHeader,
+  };
   if (json !== null && json !== undefined) {
     try {
       options.body = JSON.stringify(json);
@@ -65,7 +45,7 @@ const apiEffect = (effect, action) => {
       return Promise.reject(e);
     }
   }
-  return fetch(url, { ...options, headers }).then(res => {
+  return fetch(BASE_URL + url, { ...options, headers }).then(res => {
     if (res.ok) {
       return getResponseBody(res);
     }
@@ -75,6 +55,38 @@ const apiEffect = (effect, action) => {
   });
 }
 export default apiEffect
+
+
+
+// function callApi(endpoint, authenticated) {
+
+//   let token = localStorage.getItem('access_token') || null
+//   let config = {}
+
+//   if (authenticated) {
+//     if (token) {
+//       config = {
+//         headers: { 'Authorization': `Bearer ${token}` }
+//       }
+//     }
+//     else {
+//       throw new Error('No token saved!');
+//     }
+//   }
+
+//   return fetch(BASE_URL + endpoint, config)
+//     .then(response =>
+//       response.text().then(text => ({ text, response }))
+//     ).then(({ text, response }) => {
+//       if (!response.ok) {
+//         return Promise.reject(text)
+//       }
+
+//       return text
+//     }).catch(err => console.log(err))
+// }
+
+
 
 // export const CALL_API = Symbol('Call API')
 

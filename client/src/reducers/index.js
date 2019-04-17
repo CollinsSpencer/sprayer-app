@@ -2,9 +2,11 @@ import { combineReducers } from 'redux'
 import uuidv4 from 'uuid'
 import {
   // Action types
-  SET_MODE,
-  SET_FIELD,
-  ADD_FIELD,
+  MODE_SET,
+  FIELD_SET,
+  FIELD_ADD,
+  FIELDS_FETCH_REQUEST,
+  FIELDS_FETCH_COMMIT,
   LOGIN_CLEAR,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -59,7 +61,7 @@ const auth = (state = {
 
 const mode = (state = Modes.SPRAYING, action) => {
   switch (action.type) {
-    case SET_MODE:
+    case MODE_SET:
       return action.mode
     default:
       return state
@@ -68,7 +70,7 @@ const mode = (state = Modes.SPRAYING, action) => {
 
 const field = (state = '', action) => {
   switch (action.type) {
-    case SET_FIELD:
+    case FIELD_SET:
       return action.id
     default:
       return state
@@ -77,7 +79,11 @@ const field = (state = '', action) => {
 
 const fields = (state = [], action) => {
   switch (action.type) {
-    case ADD_FIELD:
+    case FIELDS_FETCH_REQUEST:
+      return action.payload
+    case FIELDS_FETCH_COMMIT:
+      return action.payload
+    case FIELD_ADD:
       return [
         ...state,
         {
