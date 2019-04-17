@@ -7,54 +7,16 @@ import {
   Form,
   Col,
   Container,
-  Dropdown
+  Button
 } from 'react-bootstrap'
 import BackButton from '../components/BackButton'
 import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
-import SpraySelector from '../components/SpraySelector'
-import UnitSelector from '../components/UnitSelector'
+import SprayForm from '../components/SprayForm'
+
+/*https://itnext.io/building-a-dynamic-controlled-form-in-react-together-794a44ee552c*/
 
 class RecordPage extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      spray: '',
-      amount: '',
-      price: '',
-      unit: '',
-      items: []
-    }
-  };
-
-  handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    let items = [...this.state.items];
-
-    items.push({
-      username: this.state.username,
-      password: this.state.password
-    });
-
-    this.setState({
-      items,
-      username: '',
-      password: ''
-    });
-  };
-
-  handleInputChange = (e) => {
-    let input = e.target;
-    let name = e.target.name;
-    let value = input.value;
-
-    this.setState({
-      [name]: value
-    })
-  };
-
   render() {
     return (
       <Container>
@@ -77,24 +39,17 @@ class RecordPage extends Component {
         		  <FieldSelector></FieldSelector>
             </Col>
         	</Form.Row>
-        	<Form.Row>
-            <Col>
-      			 <SpraySelector></SpraySelector>
-            </Col>
-            <Col>
-              <Form.Label>Price</Form.Label>
-              <Form.Control type="number"/>
+          <SprayForm></SprayForm>
+          <Form.Row>
+            <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+              <Button variant="primary" onClick={this.addSpray}>Add Spray</Button>
             </Col>
           </Form.Row>
           <Form.Row>
-      			<Col>
-      				<Form.Label>Amount</Form.Label>
-      				<Form.Control type="number"/>
-      			</Col>
-            <Col>
-              <UnitSelector></UnitSelector>
+            <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+              <button type="submit" value="Submit">Submit</button>
             </Col>
-        	</Form.Row>
+          </Form.Row>
         </Form>
       </Container>
     )

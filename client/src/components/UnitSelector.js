@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import Select from 'react-select'
 
 import {
   setUnitsToGallons,
@@ -8,13 +9,34 @@ import {
   setUnitsToLiters,
 } from '../actions'
 
-const UnitSelector = ({ currentUnit, setUnitsToGallons, setUnitsToQuarts, setUnitsToLiters }) => (
-  <div>
-    <div onClick={setUnitsToGallons}>Gallons</div>
-    <div onClick={setUnitsToQuarts}>Quarts</div>
-    <div onClick={setUnitsToLiters}>Liters</div>
-  </div>
-)
+const units = [
+  { value: setUnitsToGallons, label: 'Gallons' },
+  { value: setUnitsToQuarts, label: 'Quarts' },
+  { value: setUnitsToLiters, label: 'Liters' }
+];
+
+class UnitSelector extends Component {
+  state = {
+    selectedOption: null
+  }
+  handleChange = (selectedOption) => {
+    this.setState({ selectedOption });
+  }
+  render() {
+    const { selectedOption } = this.state;
+
+    return (
+      <div>
+        Unit
+        <Select
+          value={selectedOption}
+          onChange={this.handleChange}
+          options={units}
+        />
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = (state) => {
   const { unit } = state
