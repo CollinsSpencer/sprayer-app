@@ -12,9 +12,15 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGOUT_SUCCESS,
+  UNITS_SET,
+  OWNER_SET,
+  OWNER_ADD,
+  SPRAY_SET,
+  SPRAY_ADD,
 
   // Other Constants
   Modes,
+  Units,
 } from '../actions'
 
 const auth = (state = {
@@ -68,6 +74,15 @@ const mode = (state = Modes.SPRAYING, action) => {
   }
 }
 
+const unit = (state = Units.GALLONS, action) => {
+  switch (action.type) {
+    case UNITS_SET:
+      return action.unit
+    default:
+      return state
+  }
+}
+
 const field = (state = '', action) => {
   switch (action.type) {
     case FIELD_SET:
@@ -96,11 +111,64 @@ const fields = (state = [], action) => {
   }
 }
 
+const owner = (state = '', action) => {
+  switch (action.type) {
+    case OWNER_SET:
+      return action.id
+    default:
+      return state
+  }
+}
+
+const owners = (state = [], action) => {
+  switch (action.type) {
+    case OWNER_ADD:
+      return [
+        ...state,
+        {
+          id: uuidv4(),
+          name: action.owner_name,
+        }
+      ]
+    default:
+      return state
+  }
+}
+
+const spray = (state = '', action) => {
+  switch (action.type) {
+    case SPRAY_SET:
+      return action.id
+    default:
+      return state
+  }
+}
+
+const sprays = (state = [], action) => {
+  switch (action.type) {
+    case SPRAY_ADD:
+      return [
+        ...state,
+        {
+          id: uuidv4(),
+          name: action.spray_name,
+        }
+      ]
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   auth,
   mode,
+  unit,
   field,
   fields,
+  owner,
+  owners,
+  spray,
+  sprays,
 })
 
 export default rootReducer

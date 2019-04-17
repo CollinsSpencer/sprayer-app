@@ -4,6 +4,11 @@ import fetch from 'cross-fetch'
  * action types
  */
 
+export const FIELD_SET = 'FIELD_SET'
+export const FIELD_ADD = 'FIELD_ADD'
+export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
+export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
+export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
 export const LOGIN_CLEAR = 'LOGIN_CLEAR'
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -12,11 +17,11 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 export const MODE_SET = 'MODE_SET'
-export const FIELD_SET = 'FIELD_SET'
-export const FIELD_ADD = 'FIELD_ADD'
-export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
-export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
-export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
+export const OWNER_SET = 'OWNER_SET'
+export const OWNER_ADD = 'OWNER_ADD'
+export const SPRAY_SET = 'SPRAY_SET'
+export const SPRAY_ADD = 'SPRAY_ADD'
+export const UNITS_SET = 'UNITS_SET'
 
 /*
  * other constants
@@ -26,6 +31,12 @@ export const Modes = {
   PLANTING: 'PLANTING',
   SPRAYING: 'SPRAYING',
   HARVESTING: 'HARVESTING',
+}
+
+export const Units = {
+  GALLONS: 'GALLONS',
+  OUNCES: 'OUNCES',
+  LITERS: 'LITERS',
 }
 
 /*
@@ -74,9 +85,17 @@ export const clearLogin = () => ({ type: LOGIN_CLEAR })
 export const setModeToPlanting = () => ({ type: MODE_SET, mode: Modes.PLANTING })
 export const setModeToSpraying = () => ({ type: MODE_SET, mode: Modes.SPRAYING })
 export const setModeToHarvesting = () => ({ type: MODE_SET, mode: Modes.HARVESTING })
+export const setUnitsToGallons = () => ({ type: UNITS_SET, unit: Units.GALLONS })
+export const setUnitsToOunces = () => ({ type: UNITS_SET, unit: Units.OUNCES })
+export const setUnitsToLiters = () => ({ type: UNITS_SET, unit: Units.LITERS })
 export const setField = (id) => ({ type: FIELD_SET, id: id })
 export const addField = (field_name) => ({ type: FIELD_ADD, field_name: field_name })
-export const fetchTodos = () => {
+export const setOwner = (id) => ({ type: OWNER_SET, id: id })
+export const addOwner = (owner_name) => ({ type: OWNER_ADD, owner_name: owner_name })
+export const setSpray = (id) => ({ type: SPRAY_SET, id: id })
+export const addSpray = (spray_name) => ({ type: SPRAY_ADD, spray_name: spray_name })
+
+export const fetchFields = () => {
   return {
     type: FIELDS_FETCH_REQUEST,
     payload: [],
@@ -168,4 +187,3 @@ export const logoutUser = () => {
     dispatch(receiveLogout())
   }
 }
-
