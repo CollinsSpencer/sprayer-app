@@ -17,10 +17,11 @@ const units = [
 
 class UnitSelector extends Component {
   state = {
-    selectedOption: null
+    selectedOption: units[0]
   }
   handleChange = (selectedOption) => {
     this.setState({ selectedOption });
+    console.log(this.state.selectedOption.value)
   }
   render() {
     const { selectedOption } = this.state;
