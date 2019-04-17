@@ -19,7 +19,6 @@ const FieldSelector = ({ options, selectedField, addField, setField }) => {
         value={selectedField}
         placeholder="Select Field"
       />
-      {JSON.stringify(selectedField)}
     </div>
   )
 }

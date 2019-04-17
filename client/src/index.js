@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import Root from './containers/Root'
 import * as serviceWorker from './serviceWorker'
 import configureStore from './store/configureStore'
+import 'bootstrap/dist/css/bootstrap.css'
 
 // import {
   // addField,
