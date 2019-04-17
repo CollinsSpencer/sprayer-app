@@ -5,12 +5,58 @@ import {
   SET_MODE,
   SET_FIELD,
   ADD_FIELD,
+  LOGIN_CLEAR,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT_SUCCESS,
 
   // Other Constants
   Modes,
 } from '../actions'
 
-// Updates mode
+const auth = (state = {
+  isFetching: false,
+  isAuthenticated: localStorage.getItem('refresh_token') ? true : false // TODO Update this to look at time
+}, action) => {
+  switch (action.type) {
+    case LOGIN_CLEAR:
+      return {
+        ...state,
+        errorMessage: ''
+      }
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        user: action.creds.username,
+      }
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: true,
+        errorMessage: ''
+      }
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: action.message
+      }
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        isFetching: true,
+        isAuthenticated: false
+      }
+    default:
+      return state
+  }
+}
+
 const mode = (state = Modes.SPRAYING, action) => {
   switch (action.type) {
     case SET_MODE:
@@ -45,6 +91,7 @@ const fields = (state = [], action) => {
 }
 
 const rootReducer = combineReducers({
+  auth,
   mode,
   field,
   fields,

@@ -28,31 +28,79 @@ function callApi(endpoint, authenticated) {
     }).catch(err => console.log(err))
 }
 
-export const CALL_API = Symbol('Call API')
-
-export default store => next => action => {
-
-  const callAPI = action[CALL_API]
-
-  // So the middleware doesn't get applied to every single action
-  if (typeof callAPI === 'undefined') {
-    return next(action)
-  }
-
-  let { endpoint, types, authenticated } = callAPI
-
-  const [ successType, errorType ] = types
-
-  return callApi(endpoint, authenticated).then(
-    response =>
-      next({
-        response,
-        authenticated,
-        type: successType
-      }),
-    error => next({
-      error: error.message || 'There was an error.',
-      type: errorType
-    })
-  )
+export function NetworkError(response, status) {
+  this.name = 'NetworkError';
+  this.status = status;
+  this.response = response;
 }
+
+NetworkError.prototype = Error.prototype;
+
+const tryParseJSON = (json: string): ?{} => {
+  if (!json) {
+    return null;
+  }
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    throw new Error(`Failed to parse unexpected JSON response: ${json}`);
+  }
+};
+
+const getResponseBody = (res) => {
+  const contentType = res.headers.get('content-type') || false;
+  if (contentType && contentType.indexOf('json') >= 0) {
+    return res.text().then(tryParseJSON);
+  }
+  return res.text();
+};
+
+const apiEffect = (effect, action) => {
+  const { url, json, ...options } = effect;
+  const headers = { 'content-type': 'application/json', ...options.headers };
+  if (json !== null && json !== undefined) {
+    try {
+      options.body = JSON.stringify(json);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+  return fetch(url, { ...options, headers }).then(res => {
+    if (res.ok) {
+      return getResponseBody(res);
+    }
+    return getResponseBody(res).then(body => {
+      throw new NetworkError(body || '', res.status);
+    });
+  });
+}
+export default apiEffect
+
+// export const CALL_API = Symbol('Call API')
+
+// export default store => next => action => {
+
+//   const callAPI = action[CALL_API]
+
+//   // So the middleware doesn't get applied to every single action
+//   if (typeof callAPI === 'undefined') {
+//     return next(action)
+//   }
+
+//   let { endpoint, types, authenticated } = callAPI
+
+//   const [ successType, errorType ] = types
+
+//   return callApi(endpoint, authenticated).then(
+//     response =>
+//       next({
+//         response,
+//         authenticated,
+//         type: successType
+//       }),
+//     error => next({
+//       error: error.message || 'There was an error.',
+//       type: errorType
+//     })
+//   )
+// }
