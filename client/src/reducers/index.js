@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import uuidv4 from 'uuid'
 import {
   // Action types
+  AUTH_UPDATED,
   MODE_SET,
   FIELD_SET,
-  FIELD_ADD,
+  FIELD_ADD_REQUEST,
   FIELDS_FETCH_REQUEST,
   FIELDS_FETCH_COMMIT,
   LOGIN_CLEAR,
@@ -16,7 +16,9 @@ import {
   OWNER_SET,
   OWNER_ADD,
   SPRAY_SET,
-  SPRAY_ADD,
+  SPRAY_ADD_REQUEST,
+  SPRAY_ADD_COMMIT,
+  SPRAY_ADD_ROLLBACK,
 
   // Other Constants
   Modes,
@@ -28,6 +30,11 @@ const auth = (state = {
   isAuthenticated: localStorage.getItem('refresh_token') ? true : false // TODO Update this to look at time
 }, action) => {
   switch (action.type) {
+    case AUTH_UPDATED:
+      return {
+        isFetching: false,
+        isAuthenticated: localStorage.getItem('refresh_token') ? true : false // TODO Update this to look at time
+      }
     case LOGIN_CLEAR:
       return {
         ...state,
@@ -97,13 +104,13 @@ const fields = (state = [], action) => {
     case FIELDS_FETCH_REQUEST:
       return action.payload
     case FIELDS_FETCH_COMMIT:
-      return action.payload
-    case FIELD_ADD:
+      return action.payload.results
+    case FIELD_ADD_REQUEST:
       return [
         ...state,
         {
-          id: uuidv4(),
-          name: action.field_name,
+          id: action.payload.id,
+          name: action.payload.name,
         }
       ]
     default:
@@ -126,8 +133,8 @@ const owners = (state = [], action) => {
       return [
         ...state,
         {
-          id: uuidv4(),
-          name: action.owner_name,
+          id: action.payload.id,
+          name: action.payload.name,
         }
       ]
     default:
@@ -146,14 +153,27 @@ const spray = (state = '', action) => {
 
 const sprays = (state = [], action) => {
   switch (action.type) {
-    case SPRAY_ADD:
+    case SPRAY_ADD_REQUEST:
       return [
         ...state,
         {
-          id: uuidv4(),
-          name: action.spray_name,
+          id: action.payload.id,
+          name: action.payload.name,
+          syncing: true,
         }
       ]
+    case SPRAY_ADD_COMMIT:
+      // We want to replace the locally created ID with the ID from the server.
+      // Note that we don't direct manipulate `state`!
+      return [...state].map(s => s.id === action.meta.id ? {
+        ...s,
+        id: action.payload.id,
+        syncing: false
+      } : s)
+    case SPRAY_ADD_ROLLBACK:
+      // We have decided to stop retrying to sync the data.
+      // Remove the item completely from the list.
+      return [...state].filter(s => s.id !== action.meta.id)
     default:
       return state
   }

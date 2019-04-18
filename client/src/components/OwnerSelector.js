@@ -25,8 +25,6 @@ const OwnerSelector = ({ options, selectedOwner, addOwner, setOwner }) => {
 
 const mapStateToProps = (state) => {
   const { owner, owners } = state
-  console.log(owner)
-  console.log(owner)
   return {
     options: owners.map(owner => {
       return { label: owner.name, value: owner.id }

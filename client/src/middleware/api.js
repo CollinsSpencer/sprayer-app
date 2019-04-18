@@ -1,118 +1,68 @@
-import fetch from 'cross-fetch'
+import { AUTH_UPDATED } from '../actions'
 
-const BASE_URL = 'http://localhost:8000/api/'
+// const BASE_URL = 'http://localhost:8000/api/'
 
-export function NetworkError(response, status) {
-  this.name = 'NetworkError';
-  this.status = status;
-  this.response = response;
-}
+export const CALL_API = Symbol('Call API')
 
-NetworkError.prototype = Error.prototype;
+export default store => next => action => {
 
-const tryParseJSON = (json) => {
-  if (!json) {
-    return null;
+  const callAPI = action[CALL_API]
+
+  // So the middleware doesn't get applied to every single action
+  if (typeof callAPI === 'undefined') {
+    return next(action)
   }
-  try {
-    return JSON.parse(json);
-  } catch (e) {
-    throw new Error(`Failed to parse unexpected JSON response: ${json}`);
-  }
-};
 
-const getResponseBody = (res) => {
-  const contentType = res.headers.get('content-type') || false;
-  if (contentType && contentType.indexOf('json') >= 0) {
-    return res.text().then(tryParseJSON);
-  }
-  return res.text();
-};
+  let { endpoint, types, authenticated, method = 'POST', payload, json } = callAPI
 
-const apiEffect = (effect, action) => {
-  const { url, json, authenticated, ...options } = effect;
-  let token = localStorage.getItem('access_token') || null
-  let authHeader = (authenticated && token) ? { 'Authorization': `Bearer ${token}` } : {}
-  const headers = {
-    'content-type': 'application/json',
-    ...options.headers,
-    ...authHeader,
-  };
-  if (json !== null && json !== undefined) {
-    try {
-      options.body = JSON.stringify(json);
-    } catch (e) {
-      return Promise.reject(e);
+  const [requestType, successType, errorType] = types
+
+  const accessTokenBefore = localStorage.getItem('access_token') || null
+  const refreshTokenBefore = localStorage.getItem('refresh_token') || null
+
+  console.group()
+  console.log(endpoint)
+  console.log(types)
+  console.log(authenticated)
+  console.log(method)
+  console.log(payload)
+  console.log(json)
+  console.groupEnd()
+
+  if (payload == null) {
+    payload = json
+  }
+
+  next({
+    type: requestType,
+    payload,
+    meta: {
+      offline: {
+        // the network action to execute:
+        effect: {
+          url: endpoint,
+          method,
+          json,
+          authenticated,
+        },
+        // action to dispatch when effect succeeds:
+        commit: { type: successType, meta: json },
+        // action to dispatch if network action fails permanently:
+        rollback: { type: errorType, meta: json },
+      }
     }
+  })
+
+  const accessTokenAfter = localStorage.getItem('access_token') || null
+  const refreshTokenAfter = localStorage.getItem('refresh_token') || null
+
+  if (accessTokenBefore !== accessTokenAfter || refreshTokenBefore !== refreshTokenAfter || refreshTokenAfter == null) {
+    // The access token was refreshed, or the refresh token was expired or missing.
+    // We can dispatch an action to make sure our auth store item is up to date.
+    // Done here because there is no access to dispatch in the `discard` function of redux-offline.
+    store.dispatch({
+      type: AUTH_UPDATED,
+    })
   }
-  return fetch(BASE_URL + url, { ...options, headers }).then(res => {
-    if (res.ok) {
-      return getResponseBody(res);
-    }
-    return getResponseBody(res).then(body => {
-      throw new NetworkError(body || '', res.status);
-    });
-  });
+
 }
-export default apiEffect
-
-
-
-// function callApi(endpoint, authenticated) {
-
-//   let token = localStorage.getItem('access_token') || null
-//   let config = {}
-
-//   if (authenticated) {
-//     if (token) {
-//       config = {
-//         headers: { 'Authorization': `Bearer ${token}` }
-//       }
-//     }
-//     else {
-//       throw new Error('No token saved!');
-//     }
-//   }
-
-//   return fetch(BASE_URL + endpoint, config)
-//     .then(response =>
-//       response.text().then(text => ({ text, response }))
-//     ).then(({ text, response }) => {
-//       if (!response.ok) {
-//         return Promise.reject(text)
-//       }
-
-//       return text
-//     }).catch(err => console.log(err))
-// }
-
-
-
-// export const CALL_API = Symbol('Call API')
-
-// export default store => next => action => {
-
-//   const callAPI = action[CALL_API]
-
-//   // So the middleware doesn't get applied to every single action
-//   if (typeof callAPI === 'undefined') {
-//     return next(action)
-//   }
-
-//   let { endpoint, types, authenticated } = callAPI
-
-//   const [ successType, errorType ] = types
-
-//   return callApi(endpoint, authenticated).then(
-//     response =>
-//       next({
-//         response,
-//         authenticated,
-//         type: successType
-//       }),
-//     error => next({
-//       error: error.message || 'There was an error.',
-//       type: errorType
-//     })
-//   )
-// }

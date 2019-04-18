@@ -1,11 +1,14 @@
 import fetch from 'cross-fetch'
+import uuidv4 from 'uuid'
+import { CALL_API } from '../middleware/api'
 
 /*
  * action types
  */
 
+export const AUTH_UPDATED = 'AUTH_UPDATED'
 export const FIELD_SET = 'FIELD_SET'
-export const FIELD_ADD = 'FIELD_ADD'
+export const FIELD_ADD_REQUEST = 'FIELD_ADD_REQUEST'
 export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
 export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
 export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
@@ -20,7 +23,9 @@ export const MODE_SET = 'MODE_SET'
 export const OWNER_SET = 'OWNER_SET'
 export const OWNER_ADD = 'OWNER_ADD'
 export const SPRAY_SET = 'SPRAY_SET'
-export const SPRAY_ADD = 'SPRAY_ADD'
+export const SPRAY_ADD_REQUEST = 'SPRAY_ADD_REQUEST'
+export const SPRAY_ADD_COMMIT = 'SPRAY_ADD_COMMIT'
+export const SPRAY_ADD_ROLLBACK = 'SPRAY_ADD_ROLLBACK'
 export const UNITS_SET = 'UNITS_SET'
 
 /*
@@ -89,26 +94,48 @@ export const setUnitsToGallons = () => ({ type: UNITS_SET, unit: Units.GALLONS }
 export const setUnitsToOunces = () => ({ type: UNITS_SET, unit: Units.OUNCES })
 export const setUnitsToLiters = () => ({ type: UNITS_SET, unit: Units.LITERS })
 export const setField = (id) => ({ type: FIELD_SET, id: id })
-export const addField = (field_name) => ({ type: FIELD_ADD, field_name: field_name })
+export const addField = (field_name) => ({
+  type: FIELD_ADD_REQUEST,
+  payload: { field_name },
+  meta: {
+    offline: {
+      // the network action to execute:
+      effect: {
+        url: 'fields/',
+        method: 'POST',
+        json: {
+          owner: 'admin', // TODO
+          name: field_name,
+          user: 'admin', // TODO
+        },
+        authenticated: true
+      },
+      // action to dispatch when effect succeeds:
+      commit: { type: FIELDS_FETCH_COMMIT },
+    }
+  }
+})
 export const setOwner = (id) => ({ type: OWNER_SET, id: id })
 export const addOwner = (owner_name) => ({ type: OWNER_ADD, owner_name: owner_name })
 export const setSpray = (id) => ({ type: SPRAY_SET, id: id })
-export const addSpray = (spray_name) => ({ type: SPRAY_ADD, spray_name: spray_name })
-
-export const fetchFields = () => {
-  return {
-    type: FIELDS_FETCH_REQUEST,
-    payload: [],
-    meta: {
-      offline: {
-        // the network action to execute:
-        effect: { url: `/fields`, method: 'GET' },
-        // action to dispatch when effect succeeds:
-        commit: { type: FIELDS_FETCH_COMMIT },
-      }
-    }
+export const addSpray = (spray_name) => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'sprays/',
+    method: 'POST',
+    json: { name: spray_name, id: uuidv4() },
+    types: [SPRAY_ADD_REQUEST, SPRAY_ADD_COMMIT, SPRAY_ADD_ROLLBACK],
   }
-}
+})
+export const fetchFields = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'fields/',
+    method: 'GET',
+    payload: [],
+    types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+  }
+})
 
 /*
  * thunk action creators
@@ -116,7 +143,7 @@ export const fetchFields = () => {
 
 // Call the API to get a token and
 // dispatch actions along the way
-export function loginUser(creds) {
+export const loginUser = (creds) => {
 
   let config = {
     method: 'POST',
@@ -132,8 +159,6 @@ export function loginUser(creds) {
       .then(response =>
         response.json().then(user => ({ user, response }))
       ).then(({ user, response }) => {
-        console.log(response)
-        console.log(user)
         if (!response.ok) {
           // If there was a problem, we want to
           // dispatch the error condition
@@ -146,36 +171,7 @@ export function loginUser(creds) {
           // Dispatch the success action
           dispatch(receiveLogin(user))
         }
-      }).catch(err => console.log("Error: ", err))
-  }
-}
-// Refresh the access token
-export function refreshAccessToken(refreshToken) {
-  let config = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `refresh=${refreshToken}`
-  }
-
-  return dispatch => {
-    return fetch('http://localhost:8000/api/token/refresh/', config)
-      .then(response =>
-        response.json().then(user => ({ user, response }))
-      ).then(({ user, response }) => {
-        console.log(response)
-        console.log(user)
-        if (!response.ok) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(loginError(user.detail))
-          return Promise.reject(user)
-        } else {
-          // If refresh was successful, set the token in local storage
-          localStorage.setItem('access_token', user.access)
-          // Dispatch the success action
-          dispatch(receiveLogin(user))
-        }
-      }).catch(err => console.log("Error: ", err))
+      }).catch(err => console.error("Error: ", err))
   }
 }
 // Log the user out

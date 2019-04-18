@@ -27,9 +27,11 @@ class SpraySerializer(serializers.HyperlinkedModelSerializer):
         default=serializers.CurrentUserDefault(),
     )
 
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Spray
-        fields = ('name', 'user')
+        fields = ('id', 'name', 'user')
 
 
 class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):

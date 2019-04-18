@@ -6,11 +6,24 @@ import CreatableSelect from 'react-select/lib/Creatable'
 import {
   addField,
   setField,
+  fetchFields,
 } from '../actions'
 
-const FieldSelector = ({ options, selectedField, addField, setField }) => {
+
+const FieldSelector = ({ options, selectedField, addField, setField, fetchFields }) => {
+  const loadFieldData = (e) => {
+    e.preventDefault()
+    fetchFields()
+  }
   return (
     <div>
+      <button
+        onClick={(event) => loadFieldData(event)}
+        type="text"
+      >
+        Load Field Data
+      </button>
+
       Field:
       <CreatableSelect
         options={options}
@@ -25,8 +38,6 @@ const FieldSelector = ({ options, selectedField, addField, setField }) => {
 
 const mapStateToProps = (state) => {
   const { field, fields } = state
-  console.log(field)
-  console.log(fields)
   return {
     options: fields.map(field => {
       return { label: field.name, value: field.id }
@@ -38,6 +49,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addField,
   setField,
+  fetchFields,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FieldSelector))

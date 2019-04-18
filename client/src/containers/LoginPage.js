@@ -12,7 +12,7 @@ import {
 
 class LoginPage extends Component {
   componentDidMount() {
-    console.log("LoginPageMounted")
+    // console.log("LoginPageMounted") // TODO
     this.props.clearLogin()
   }
   render() {
