@@ -8,7 +8,7 @@ import { offline } from '@redux-offline/redux-offline'
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults'
 
 import api from '../middleware/api'
-import { apiEffect, apiDiscard } from './offlineConfig'
+import { apiEffect, apiDiscard, apiPersistOptions } from './offlineConfig'
 // import localIds from "../middlewares/redux-offline-localids"
 // import OfflineReducer from "../reducers/offline";
 import rootReducer from '../reducers'
@@ -27,6 +27,7 @@ const configureStore = preloadedState => createStore(
       ...offlineConfig,
       effect: apiEffect,
       discard: apiDiscard,
+      persistOptions: apiPersistOptions,
     }),
     // localIds({reducer: OfflineReducer}),
   ),

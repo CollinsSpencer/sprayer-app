@@ -47,9 +47,10 @@ class OwnerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FieldSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     class Meta:
         model = Field
-        fields = ('owner', 'name', 'user')
+        fields = ('id', 'owner', 'name', 'user')
 
 
 class FieldSeasonSerializer(serializers.HyperlinkedModelSerializer):

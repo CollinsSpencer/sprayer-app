@@ -4,10 +4,11 @@ import {
   AUTH_UPDATED,
   MODE_SET,
   FIELD_SET,
-  FIELD_ADD_REQUEST,
+  FIELDS_ADD_REQUEST,
+  FIELDS_ADD_COMMIT,
+  FIELDS_ADD_ROLLBACK,
   FIELDS_FETCH_REQUEST,
   FIELDS_FETCH_COMMIT,
-  LOGIN_CLEAR,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -16,9 +17,9 @@ import {
   OWNER_SET,
   OWNER_ADD,
   SPRAY_SET,
-  SPRAY_ADD_REQUEST,
-  SPRAY_ADD_COMMIT,
-  SPRAY_ADD_ROLLBACK,
+  SPRAYS_ADD_REQUEST,
+  SPRAYS_ADD_COMMIT,
+  SPRAYS_ADD_ROLLBACK,
 
   // Other Constants
   Modes,
@@ -34,11 +35,6 @@ const auth = (state = {
       return {
         isFetching: false,
         isAuthenticated: localStorage.getItem('refresh_token') ? true : false // TODO Update this to look at time
-      }
-    case LOGIN_CLEAR:
-      return {
-        ...state,
-        errorMessage: ''
       }
     case LOGIN_REQUEST:
       return {
@@ -105,14 +101,25 @@ const fields = (state = [], action) => {
       return action.payload
     case FIELDS_FETCH_COMMIT:
       return action.payload.results
-    case FIELD_ADD_REQUEST:
+    case FIELDS_ADD_REQUEST:
       return [
         ...state,
         {
           id: action.payload.id,
           name: action.payload.name,
+          owner: action.payload.owner,
+          syncing: true,
+          user: action.payload.user,
         }
       ]
+    case FIELDS_ADD_COMMIT:
+      return [...state].map(f => f.id === action.meta.id ? {
+        ...f,
+        id: action.payload.id,
+        syncing: false
+      } : f)
+    case FIELDS_ADD_ROLLBACK:
+      return [...state].filter(f => f.id !== action.meta.id)
     default:
       return state
   }
@@ -153,7 +160,7 @@ const spray = (state = '', action) => {
 
 const sprays = (state = [], action) => {
   switch (action.type) {
-    case SPRAY_ADD_REQUEST:
+    case SPRAYS_ADD_REQUEST:
       return [
         ...state,
         {
@@ -162,7 +169,7 @@ const sprays = (state = [], action) => {
           syncing: true,
         }
       ]
-    case SPRAY_ADD_COMMIT:
+    case SPRAYS_ADD_COMMIT:
       // We want to replace the locally created ID with the ID from the server.
       // Note that we don't direct manipulate `state`!
       return [...state].map(s => s.id === action.meta.id ? {
@@ -170,7 +177,7 @@ const sprays = (state = [], action) => {
         id: action.payload.id,
         syncing: false
       } : s)
-    case SPRAY_ADD_ROLLBACK:
+    case SPRAYS_ADD_ROLLBACK:
       // We have decided to stop retrying to sync the data.
       // Remove the item completely from the list.
       return [...state].filter(s => s.id !== action.meta.id)

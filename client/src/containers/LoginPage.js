@@ -6,15 +6,10 @@ import {
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
-  clearLogin,
   loginUser,
 } from '../actions'
 
 class LoginPage extends Component {
-  componentDidMount() {
-    // console.log("LoginPageMounted") // TODO
-    this.props.clearLogin()
-  }
   render() {
     const { errorMessage, redirect, location } = this.props
 
@@ -70,7 +65,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  clearLogin,
   loginUser,
 }
 

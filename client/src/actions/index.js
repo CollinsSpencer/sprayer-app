@@ -8,11 +8,12 @@ import { CALL_API } from '../middleware/api'
 
 export const AUTH_UPDATED = 'AUTH_UPDATED'
 export const FIELD_SET = 'FIELD_SET'
-export const FIELD_ADD_REQUEST = 'FIELD_ADD_REQUEST'
+export const FIELDS_ADD_REQUEST = 'FIELDS_ADD_REQUEST'
+export const FIELDS_ADD_COMMIT = 'FIELDS_ADD_COMMIT'
+export const FIELDS_ADD_ROLLBACK = 'FIELDS_ADD_ROLLBACK'
 export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
 export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
 export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
-export const LOGIN_CLEAR = 'LOGIN_CLEAR'
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
@@ -23,9 +24,9 @@ export const MODE_SET = 'MODE_SET'
 export const OWNER_SET = 'OWNER_SET'
 export const OWNER_ADD = 'OWNER_ADD'
 export const SPRAY_SET = 'SPRAY_SET'
-export const SPRAY_ADD_REQUEST = 'SPRAY_ADD_REQUEST'
-export const SPRAY_ADD_COMMIT = 'SPRAY_ADD_COMMIT'
-export const SPRAY_ADD_ROLLBACK = 'SPRAY_ADD_ROLLBACK'
+export const SPRAYS_ADD_REQUEST = 'SPRAYS_ADD_REQUEST'
+export const SPRAYS_ADD_COMMIT = 'SPRAYS_ADD_COMMIT'
+export const SPRAYS_ADD_ROLLBACK = 'SPRAYS_ADD_ROLLBACK'
 export const UNITS_SET = 'UNITS_SET'
 
 /*
@@ -86,7 +87,6 @@ const receiveLogout = () => {
     isAuthenticated: false
   }
 }
-export const clearLogin = () => ({ type: LOGIN_CLEAR })
 export const setModeToPlanting = () => ({ type: MODE_SET, mode: Modes.PLANTING })
 export const setModeToSpraying = () => ({ type: MODE_SET, mode: Modes.SPRAYING })
 export const setModeToHarvesting = () => ({ type: MODE_SET, mode: Modes.HARVESTING })
@@ -95,24 +95,17 @@ export const setUnitsToOunces = () => ({ type: UNITS_SET, unit: Units.OUNCES })
 export const setUnitsToLiters = () => ({ type: UNITS_SET, unit: Units.LITERS })
 export const setField = (id) => ({ type: FIELD_SET, id: id })
 export const addField = (field_name) => ({
-  type: FIELD_ADD_REQUEST,
-  payload: { field_name },
-  meta: {
-    offline: {
-      // the network action to execute:
-      effect: {
-        url: 'fields/',
-        method: 'POST',
-        json: {
-          owner: 'admin', // TODO
-          name: field_name,
-          user: 'admin', // TODO
-        },
-        authenticated: true
-      },
-      // action to dispatch when effect succeeds:
-      commit: { type: FIELDS_FETCH_COMMIT },
-    }
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'fields/',
+    method: 'POST',
+    json: {
+      id: uuidv4(),
+      name: field_name,
+      owner: 'http://localhost:8000/api/owners/1/', // TODO
+      user: 'http://localhost:8000/api/users/1/', // TODO
+    },
+    types: [FIELDS_ADD_REQUEST, FIELDS_ADD_COMMIT, FIELDS_ADD_ROLLBACK],
   }
 })
 export const setOwner = (id) => ({ type: OWNER_SET, id: id })
@@ -123,8 +116,11 @@ export const addSpray = (spray_name) => ({
     authenticated: true,
     endpoint: 'sprays/',
     method: 'POST',
-    json: { name: spray_name, id: uuidv4() },
-    types: [SPRAY_ADD_REQUEST, SPRAY_ADD_COMMIT, SPRAY_ADD_ROLLBACK],
+    json: {
+      id: uuidv4(),
+      name: spray_name,
+    },
+    types: [SPRAYS_ADD_REQUEST, SPRAYS_ADD_COMMIT, SPRAYS_ADD_ROLLBACK],
   }
 })
 export const fetchFields = () => ({

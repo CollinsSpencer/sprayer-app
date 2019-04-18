@@ -2,7 +2,7 @@ import fetch from 'cross-fetch'
 
 const BASE_URL = 'http://localhost:8000/api/'
 
-export function NetworkError(response, status) {
+export const NetworkError = (response, status) => {
   this.name = 'NetworkError';
   this.status = status;
   this.response = response;
@@ -28,6 +28,30 @@ const getResponseBody = (res) => {
   }
   return res.text();
 };
+
+// Refresh the access token
+const refreshAccessToken = () => {
+  let refreshToken = localStorage.getItem('refresh_token') || null
+  let config = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `refresh=${refreshToken}`
+  }
+  return fetch(BASE_URL + 'token/refresh/', config)
+    .then(response =>
+      response.json().then(user => ({ user, response }))
+    ).then(({ user, response }) => {
+      if (!response.ok) {
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('access_token')
+        return Promise.reject(user)
+      } else {
+        // If refresh was successful, set the token in local storage
+        localStorage.setItem('access_token', user.access)
+        return user.access
+      }
+    }).catch(err => console.error("Error: ", err))
+}
 
 export const apiEffect = (effect, _action) => {
   const { url, json, authenticated, ...options } = effect;
@@ -58,6 +82,7 @@ export const apiEffect = (effect, _action) => {
     });
   });
 }
+
 export const apiDiscard = async (error, _action, _retries) => {
   if (error === null || error.status === null) return false;
 
@@ -69,28 +94,6 @@ export const apiDiscard = async (error, _action, _retries) => {
   return 400 <= error.status && error.status < 500
 }
 
-// Refresh the access token
-const refreshAccessToken = () => {
-  let refreshToken = localStorage.getItem('refresh_token') || null
-  let config = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `refresh=${refreshToken}`
-  }
-
-  return fetch(BASE_URL + 'token/refresh/', config)
-    .then(response =>
-      response.json().then(user => ({ user, response }))
-    ).then(({ user, response }) => {
-      if (!response.ok) {
-        localStorage.removeItem('refresh_token')
-        localStorage.removeItem('access_token')
-        return Promise.reject(user)
-      } else {
-        // If refresh was successful, set the token in local storage
-        localStorage.setItem('access_token', user.access)
-        return user.access
-      }
-    }).catch(err => console.error("Error: ", err))
-
+export const apiPersistOptions = {
+  blacklist: ['auth'],
 }
