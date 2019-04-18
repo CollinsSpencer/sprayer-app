@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import {
   Container
 } from 'react-bootstrap'
-import BackButton from '../components/BackButton'
 import DownloadSheet from '../components/DownloadSheet'
 import SprayBar from '../components/SprayBar'
 
@@ -14,9 +13,6 @@ class DataPage extends Component {
     	<Container>
 	    	<SprayBar></SprayBar>
 	    	<div>
-		    	<div>
-		        <BackButton></BackButton>
-		    	</div>
 		      <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
 		        <h2>Data Analysis</h2>
 		      </div>

@@ -23,7 +23,7 @@ class SprayBar extends Component {
   }
 
   handleClick(e) {
-    e.preventDefault()
+    e.preventDefault();
   }
 
   render() {
@@ -37,7 +37,7 @@ class SprayBar extends Component {
             <Nav.Link href="/data" onSelect={(event) => this.handleClick(event)}>View Data</Nav.Link>
             <NavDropdown title="Select Mode" id="basic-nav-dropdown" onSelect={this.handleChange}>
               <NavDropdown.Item eventKey="setModeToPlanting">Plant</NavDropdown.Item>
-              <NavDropdown.Item eventKey="setModeToSpraying" active>Spray</NavDropdown.Item>
+              <NavDropdown.Item eventKey="setModeToSpraying">Spray</NavDropdown.Item>
               <NavDropdown.Item eventKey="setModeToHarvesting">Harvest</NavDropdown.Item>
             </NavDropdown>
           </Nav>

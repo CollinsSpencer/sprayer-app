@@ -9,7 +9,6 @@ import {
   Container,
   Button
 } from 'react-bootstrap'
-import BackButton from '../components/BackButton'
 import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
 import SprayForm from '../components/SprayForm'
@@ -29,7 +28,6 @@ class RecordPage extends Component {
         <Form>
         	<Form.Row>
   	        <Col xs={5} md={4}>
-  	        	<BackButton></BackButton>
   	        </Col>
   	        <Col xs={8} md={4} style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
   	        	<h2>Record Data</h2>
