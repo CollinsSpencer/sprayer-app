@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import CreatableSelect from 'react-select/lib/Creatable'
@@ -10,30 +10,26 @@ import {
 } from '../actions'
 
 
-const FieldSelector = ({ options, selectedField, addField, setField, fetchFields }) => {
-  const loadFieldData = (e) => {
-    e.preventDefault()
-    fetchFields()
+class FieldSelector extends Component {
+  componentDidMount() {
+    this.props.fetchFields()
   }
-  return (
-    <div>
-      <button
-        onClick={(event) => loadFieldData(event)}
-        type="text"
-      >
-        Load Field Data
-      </button>
+  render() {
+    const { options, selectedField, addField, setField } = this.props
 
-      Field:
-      <CreatableSelect
-        options={options}
-        onChange={setField}
-        onCreateOption={addField}
-        value={selectedField}
-        placeholder="Select Field"
-      />
-    </div>
-  )
+    return (
+      <div>
+        Field:
+        <CreatableSelect
+          options={options}
+          onChange={setField}
+          onCreateOption={addField}
+          value={selectedField}
+          placeholder="Select Field"
+        />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
