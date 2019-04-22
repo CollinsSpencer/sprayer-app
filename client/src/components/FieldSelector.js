@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import CreatableSelect from 'react-select/lib/Creatable'
@@ -6,27 +6,34 @@ import CreatableSelect from 'react-select/lib/Creatable'
 import {
   addField,
   setField,
+  fetchFields,
 } from '../actions'
 
-const FieldSelector = ({ options, selectedField, addField, setField }) => {
-  return (
-    <div>
-      Field:
-      <CreatableSelect
-        options={options}
-        onChange={setField}
-        onCreateOption={addField}
-        value={selectedField}
-        placeholder="Select Field"
-      />
-    </div>
-  )
+
+class FieldSelector extends Component {
+  componentDidMount() {
+    this.props.fetchFields()
+  }
+  render() {
+    const { options, selectedField, addField, setField } = this.props
+
+    return (
+      <div>
+        Field:
+        <CreatableSelect
+          options={options}
+          onChange={setField}
+          onCreateOption={addField}
+          value={selectedField}
+          placeholder="Select Field"
+        />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
   const { field, fields } = state
-  console.log(field)
-  console.log(fields)
   return {
     options: fields.map(field => {
       return { label: field.name, value: field.id }
@@ -38,6 +45,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addField,
   setField,
+  fetchFields,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FieldSelector))

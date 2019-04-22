@@ -25,8 +25,6 @@ const SpraySelector = ({ options, selectedSpray, addSpray, setSpray }) => {
 
 const mapStateToProps = (state) => {
   const { spray, sprays } = state
-  console.log(spray)
-  console.log(sprays)
   return {
     options: sprays.map(spray => {
       return { label: spray.name, value: spray.id }
