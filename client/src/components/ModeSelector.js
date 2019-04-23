@@ -1,46 +1,37 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import Select from 'react-select'
+import Select from 'react-select/lib/Select'
 
 import {
   setModeToPlanting,
   setModeToSpraying,
   setModeToHarvesting,
+  setMode
 } from '../actions'
 
-const modes = [
-  { value: setModeToPlanting, label: 'Planting' },
-  { value: setModeToSpraying, label: 'Spraying' },
-  { value: setModeToHarvesting, label: 'Harvesting' }
-];
-
-class ModeSelector extends Component {
-  state = {
-    mode: modes[1]
-  }
-  handleChange = (mode) => {
-    this.setState({ mode });
-    console.log(this.state.mode.value)
-  }
-  render() {
-    const { mode } = this.state;
-
-    return (
-      <div>
-        Mode
-        <Select
-          value={mode}
-          onChange={this.handleChange}
-          options={modes}
-        />
-      </div>
-    );
-  }
+const ModeSelector = ({ options, currentMode, setMode }) => {
+  return (
+    <div>
+      Mode:
+      <Select
+        options={options}
+        onChange={setMode}
+        value={currentMode}
+      />
+    </div>
+  )
 }
+
+const options = [
+  { label: 'Planting', value: setModeToPlanting },
+  { label: 'Spraying', value: setModeToSpraying },
+  { label: 'Harvesting', value: setModeToHarvesting }
+]
 
 const mapStateToProps = (state) => {
   const { mode } = state
+  console.log(mode)
   return { currentMode: mode }
 }
 

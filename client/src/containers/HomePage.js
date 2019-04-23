@@ -9,13 +9,17 @@ import {
 } from 'react-bootstrap'
 import SprayBar from '../components/SprayBar'
 import RecentData from '../components/RecentData'
+import ModeSelector from '../components/ModeSelector'
 
 class HomePage extends Component {
   render() {
     return (
       <Container>
         <SprayBar></SprayBar>
-        <Row xs={8} md={4} style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <Row>
+          <ModeSelector></ModeSelector>
+        </Row>
+        <Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
           <RecentData></RecentData>
         </Row>
       </Container>
