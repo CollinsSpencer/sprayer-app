@@ -86,6 +86,9 @@ export const apiEffect = (effect, _action) => {
 export const apiDiscard = async (error, _action, _retries) => {
   if (error === null || error.status === null) return false;
 
+  console.group("Error group")
+  console.log(error.status)
+  console.groupEnd()
   if (error.status === 401) {
     console.log("REFRESH ACCESS TOKEN")
     const newAccessToken = await refreshAccessToken()

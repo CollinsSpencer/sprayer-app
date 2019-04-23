@@ -7,7 +7,6 @@ import {
   FIELDS_ADD_REQUEST,
   FIELDS_ADD_COMMIT,
   FIELDS_ADD_ROLLBACK,
-  FIELDS_FETCH_REQUEST,
   FIELDS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -15,7 +14,10 @@ import {
   LOGOUT_SUCCESS,
   UNITS_SET,
   OWNER_SET,
-  OWNER_ADD,
+  OWNERS_ADD_REQUEST,
+  OWNERS_ADD_COMMIT,
+  OWNERS_ADD_ROLLBACK,
+  OWNERS_FETCH_COMMIT,
   SPRAY_SET,
   SPRAYS_ADD_REQUEST,
   SPRAYS_ADD_COMMIT,
@@ -97,10 +99,6 @@ const field = (state = '', action) => {
 
 const fields = (state = [], action) => {
   switch (action.type) {
-    case FIELDS_FETCH_REQUEST:
-      return action.payload
-    case FIELDS_FETCH_COMMIT:
-      return action.payload.results
     case FIELDS_ADD_REQUEST:
       return [
         ...state,
@@ -120,6 +118,8 @@ const fields = (state = [], action) => {
       } : f)
     case FIELDS_ADD_ROLLBACK:
       return [...state].filter(f => f.id !== action.meta.id)
+    case FIELDS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }
@@ -136,14 +136,25 @@ const owner = (state = '', action) => {
 
 const owners = (state = [], action) => {
   switch (action.type) {
-    case OWNER_ADD:
+    case OWNERS_ADD_REQUEST:
       return [
         ...state,
         {
           id: action.payload.id,
           name: action.payload.name,
+          syncing: true,
         }
       ]
+    case OWNERS_ADD_COMMIT:
+      return [...state].map(o => o.id === action.meta.id ? {
+        ...o,
+        id: action.payload.id,
+        syncing: false
+      } : o)
+    case OWNERS_ADD_ROLLBACK:
+      return [...state].filter(o => o.id !== action.meta.id)
+    case OWNERS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }

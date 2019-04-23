@@ -5,8 +5,8 @@ import CreatableSelect from 'react-select/lib/Creatable'
 
 import {
   addField,
-  setField,
   fetchFields,
+  setField,
 } from '../actions'
 
 
@@ -44,8 +44,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   addField,
-  setField,
   fetchFields,
+  setField,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FieldSelector))

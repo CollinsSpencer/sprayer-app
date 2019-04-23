@@ -22,7 +22,12 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 export const MODE_SET = 'MODE_SET'
 export const OWNER_SET = 'OWNER_SET'
-export const OWNER_ADD = 'OWNER_ADD'
+export const OWNERS_ADD_REQUEST = 'OWNERS_ADD_REQUEST'
+export const OWNERS_ADD_COMMIT = 'OWNERS_ADD_COMMIT'
+export const OWNERS_ADD_ROLLBACK = 'OWNERS_ADD_ROLLBACK'
+export const OWNERS_FETCH_REQUEST = 'OWNERS_FETCH_REQUEST'
+export const OWNERS_FETCH_COMMIT = 'OWNERS_FETCH_COMMIT'
+export const OWNERS_FETCH_ROLLBACK = 'OWNERS_FETCH_ROLLBACK'
 export const SPRAY_SET = 'SPRAY_SET'
 export const SPRAYS_ADD_REQUEST = 'SPRAYS_ADD_REQUEST'
 export const SPRAYS_ADD_COMMIT = 'SPRAYS_ADD_COMMIT'
@@ -108,8 +113,37 @@ export const addField = (field_name) => ({
     types: [FIELDS_ADD_REQUEST, FIELDS_ADD_COMMIT, FIELDS_ADD_ROLLBACK],
   }
 })
+export const fetchFields = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'fields/',
+    method: 'GET',
+    payload: [],
+    types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+  }
+})
 export const setOwner = (id) => ({ type: OWNER_SET, id: id })
-export const addOwner = (owner_name) => ({ type: OWNER_ADD, owner_name: owner_name })
+export const addOwner = (owner_name) => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'owners/',
+    method: 'POST',
+    json: {
+      id: uuidv4(),
+      name: owner_name,
+    },
+    types: [OWNERS_ADD_REQUEST, OWNERS_ADD_COMMIT, OWNERS_ADD_ROLLBACK],
+  }
+})
+export const fetchOwners = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'owners/',
+    method: 'GET',
+    payload: [],
+    types: [OWNERS_FETCH_REQUEST, OWNERS_FETCH_COMMIT, OWNERS_FETCH_ROLLBACK],
+  }
+})
 export const setSpray = (id) => ({ type: SPRAY_SET, id: id })
 export const addSpray = (spray_name) => ({
   [CALL_API]: {
@@ -121,15 +155,6 @@ export const addSpray = (spray_name) => ({
       name: spray_name,
     },
     types: [SPRAYS_ADD_REQUEST, SPRAYS_ADD_COMMIT, SPRAYS_ADD_ROLLBACK],
-  }
-})
-export const fetchFields = () => ({
-  [CALL_API]: {
-    authenticated: true,
-    endpoint: 'fields/',
-    method: 'GET',
-    payload: [],
-    types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
   }
 })
 
