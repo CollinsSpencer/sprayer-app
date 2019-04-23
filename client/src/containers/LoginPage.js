@@ -4,6 +4,13 @@ import {
   withRouter,
   Redirect,
 } from 'react-router-dom'
+import {
+  Container,
+  Row,
+  Form,
+  Button,
+  Col
+} from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import {
   loginUser,
@@ -21,21 +28,41 @@ class LoginPage extends Component {
     }
 
     return (
-      <form>
-        <h2>Login</h2>
-        <input type="text" ref="username" className="form-control" placeholder="Username" />
-        <input type="password" ref="password" className="form-control" placeholder="Password" />
-        <button
-          onClick={(event) => this.handleClick(event)}
-          type="submit"
-        >
-          Login
-        </button>
+      <Container>
+        <Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+          <Form>
+            <Form.Row>
+              <Col xs={5} md={4}>
+              </Col>
+              <Col xs={8} md={4} style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                <h2>Login</h2>
+              </Col>
+              <Col xs={5} md={4}>
+              </Col>
+            </Form.Row>
+            <Form.Row>
+              <input type="text" ref="username" className="form-control" placeholder="Username" />
+            </Form.Row>
+            <Form.Row>
+              <input type="password" ref="password" className="form-control" placeholder="Password" />
+            </Form.Row>
+            <Form.Row>
+              <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                <Button
+                  variant="primary"
+                  onClick={(event) => this.handleClick(event)}
+                  type="submit">
+                  Login
+                </Button>
+              </Col>
+            </Form.Row>
 
-        {errorMessage &&
-          <p>{errorMessage}</p>
-        }
-      </form>
+            {errorMessage &&
+              <p>{errorMessage}</p>
+            }
+          </Form>
+        </Row>
+      </Container>
     )
   }
   handleClick(e) {
