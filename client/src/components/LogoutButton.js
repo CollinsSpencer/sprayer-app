@@ -2,15 +2,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
+  Button,
+} from 'react-bootstrap'
+import {
   logoutUser,
 } from '../actions'
 
-const LogoutButton = ({logoutUser}) => {
+const LogoutButton = ({ logoutUser }) => {
   return (
-    <button
-      onClick={logoutUser}>
+    <Button
+      onClick={logoutUser}
+      variant="outline-secondary"
+    >
       Logout
-    </button>
+    </Button>
   )
 }
 
