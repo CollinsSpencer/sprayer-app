@@ -31,7 +31,7 @@ class SprayBar extends Component {
   }
 
   render() {
-    const {auth} = this.props
+    const { auth } = this.props
     return (
       <Navbar bg="light" expand="lg">
         <LinkContainer to="/"><Navbar.Brand>Sprayer App</Navbar.Brand></LinkContainer>
@@ -46,11 +46,11 @@ class SprayBar extends Component {
               <NavDropdown.Item active={this.props.currentMode === Modes.HARVESTING} onSelect={this.props.setModeToHarvesting}>Harvest</NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          { auth.isAuthenticated ? (
+          {auth.isAuthenticated ? (
             <LogoutButton></LogoutButton>
-          ):(
-            <LinkContainer to="/login"><Nav.Link>Login</Nav.Link></LinkContainer>
-          )}
+          ) : (
+              <LinkContainer to="/login"><Nav.Link>Login</Nav.Link></LinkContainer>
+            )}
         </Navbar.Collapse>
       </Navbar>
     )

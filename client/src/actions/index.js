@@ -16,6 +16,9 @@ export const FIELDS_ADD_ROLLBACK = 'FIELDS_ADD_ROLLBACK'
 export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
 export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
 export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
+export const FIELDSEASONS_FETCH_REQUEST = 'FIELDSEASONS_FETCH_REQUEST'
+export const FIELDSEASONS_FETCH_COMMIT = 'FIELDSEASONS_FETCH_COMMIT'
+export const FIELDSEASONS_FETCH_ROLLBACK = 'FIELDSEASONS_FETCH_ROLLBACK'
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
@@ -39,6 +42,9 @@ export const SPRAYS_ADD_ROLLBACK = 'SPRAYS_ADD_ROLLBACK'
 export const SPRAYS_FETCH_REQUEST = 'SPRAYS_FETCH_REQUEST'
 export const SPRAYS_FETCH_COMMIT = 'SPRAYS_FETCH_COMMIT'
 export const SPRAYS_FETCH_ROLLBACK = 'SPRAYS_FETCH_ROLLBACK'
+export const SPRAYAPPLICATIONS_FETCH_REQUEST = 'SPRAYAPPLICATIONS_FETCH_REQUEST'
+export const SPRAYAPPLICATIONS_FETCH_COMMIT = 'SPRAYAPPLICATIONS_FETCH_COMMIT'
+export const SPRAYAPPLICATIONS_FETCH_ROLLBACK = 'SPRAYAPPLICATIONS_FETCH_ROLLBACK'
 
 /*
  * other constants
@@ -119,6 +125,15 @@ export const fetchFields = () => ({
     types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
   }
 })
+export const fetchFieldSeasons = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'field-seasons/',
+    method: 'GET',
+    payload: [],
+    types: [FIELDSEASONS_FETCH_REQUEST, FIELDSEASONS_FETCH_COMMIT, FIELDSEASONS_FETCH_ROLLBACK],
+  }
+})
 export const setModeToPlanting = () => ({ type: MODE_SET, mode: Modes.PLANTING })
 export const setModeToSpraying = () => ({ type: MODE_SET, mode: Modes.SPRAYING })
 export const setModeToHarvesting = () => ({ type: MODE_SET, mode: Modes.HARVESTING })
@@ -166,6 +181,15 @@ export const fetchSprays = () => ({
     method: 'GET',
     payload: [],
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
+  }
+})
+export const fetchSprayApplications = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'spray-applications/',
+    method: 'GET',
+    payload: [],
+    types: [SPRAYAPPLICATIONS_FETCH_REQUEST, SPRAYAPPLICATIONS_FETCH_COMMIT, SPRAYAPPLICATIONS_FETCH_ROLLBACK],
   }
 })
 
