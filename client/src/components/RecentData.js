@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
@@ -7,6 +7,14 @@ import {
   Table
 } from 'react-bootstrap'
 import DisplayData from '../components/DisplayData'
+
+import {
+  fetchFieldSeasons,
+  fetchFields,
+  fetchOwners,
+  fetchSprayApplications,
+  fetchSprays
+} from '../actions'
 
 const dataSet = [
     {
@@ -55,38 +63,62 @@ const dataSet = [
     }
 ];
 
-const RecentData = () => {
-  var displaySet = [];
+class RecentData extends Component {
+  componentDidMount() {
+    const { fetchFieldSeasons, fetchFields, fetchOwners, fetchSprayApplications } = this.props
 
-  for (var i = 0; i < dataSet.length; i++) {
-    displaySet.push(<DisplayData key={i} data={dataSet[i]}/>);
+    fetchFieldSeasons()
+    fetchFields()
+    fetchOwners()
+    fetchSprayApplications()
   }
 
-  return (
-    <Container>
-	    	<Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-		      <h2>Recent Data</h2>
-		    </Row>
-	      <Row>
-	      	<Table striped bordered hover>
-	      		<thead>
-	      			<tr>
-		      			<th>Owner</th>
-		      			<th>Date</th>
-		      			<th>Field</th>
-		      			<th>Acres</th>
-		      			<th>Spray</th>
-		      			<th>Usage</th>
-		      			<th>Cost</th>
-		      		</tr>
-	      		</thead>
-	      		<tbody>
-	      			{displaySet}
-	      		</tbody>
-	      	</Table>
-	      </Row>
-	    </Container>
-  )
+  render() {
+    const displaySet = dataSet.map((d, i) => <DisplayData key={i} data={d} />)
+
+    return (
+      <Container>
+        <Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+          <h2>Recent Data</h2>
+        </Row>
+        <Row>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Owner</th>
+                <th>Date</th>
+                <th>Field</th>
+                <th>Acres</th>
+                <th>Spray</th>
+                <th>Usage</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displaySet}
+            </tbody>
+          </Table>
+        </Row>
+      </Container>
+    )
+  }
 }
 
-export default withRouter(connect()(RecentData))
+const mapStateToProps = (state) => {
+  console.log(state)
+  //TODO- parse this
+  const { fieldSeasons, fields, owners, sprayApplications, sprays } = state
+  return {
+    dataSet: fieldSeasons
+  }
+}
+
+const mapDispatchToProps = {
+  fetchFieldSeasons,
+  fetchFields,
+  fetchOwners,
+  fetchSprayApplications,
+  fetchSprays
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RecentData))

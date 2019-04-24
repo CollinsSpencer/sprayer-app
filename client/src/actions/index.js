@@ -19,9 +19,6 @@ export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
 export const FIELDSEASONS_FETCH_REQUEST = 'FIELDSEASONS_FETCH_REQUEST'
 export const FIELDSEASONS_FETCH_COMMIT = 'FIELDSEASONS_FETCH_COMMIT'
 export const FIELDSEASONS_FETCH_ROLLBACK = 'FIELDSEASONS_FETCH_ROLLBACK'
-export const OWNERS_FETCH_REQUEST = 'OWNERS_FETCH_REQUEST'
-export const OWNERS_FETCH_COMMIT = 'OWNERS_FETCH_COMMIT'
-export const OWNERS_FETCH_ROLLBACK = 'OWNERS_FETCH_ROLLBACK'
 export const SPRAYAPPLICATIONS_FETCH_REQUEST = 'SPRAYAPPLICATIONS_FETCH_REQUEST'
 export const SPRAYAPPLICATIONS_FETCH_COMMIT = 'SPRAYAPPLICATIONS_FETCH_COMMIT'
 export const SPRAYAPPLICATIONS_FETCH_ROLLBACK = 'SPRAYAPPLICATIONS_FETCH_ROLLBACK'
@@ -144,15 +141,6 @@ export const addOwner = (owner_name) => ({
     types: [OWNERS_ADD_REQUEST, OWNERS_ADD_COMMIT, OWNERS_ADD_ROLLBACK],
   }
 })
-export const fetchOwners = () => ({
-  [CALL_API]: {
-    authenticated: true,
-    endpoint: 'owners/',
-    method: 'GET',
-    payload: [],
-    types: [OWNERS_FETCH_REQUEST, OWNERS_FETCH_COMMIT, OWNERS_FETCH_ROLLBACK],
-  }
-})
 export const setPriceUnits = (units) => ({ type: PRICE_UNITS_SET, units })
 export const setPriceValue = (value) => ({ type: PRICE_VALUE_SET, value })
 export const setSpray = (spray) => ({ type: SPRAY_SET, payload: spray })
@@ -177,13 +165,13 @@ export const fetchSprays = () => ({
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
-export const fetchFields = () => ({
+export const fetchSprayApplications = () => ({
   [CALL_API]: {
     authenticated: true,
-    endpoint: 'sprays/',
+    endpoint: 'spray-applications/',
     method: 'GET',
     payload: [],
-    types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
+    types: [SPRAYAPPLICATIONS_FETCH_REQUEST, SPRAYAPPLICATIONS_FETCH_COMMIT, SPRAYAPPLICATIONS_FETCH_ROLLBACK],
   }
 })
 export const fetchFieldSeasons = () => ({
@@ -202,15 +190,6 @@ export const fetchOwners = () => ({
     method: 'GET',
     payload: [],
     types: [OWNERS_FETCH_REQUEST, OWNERS_FETCH_COMMIT, OWNERS_FETCH_ROLLBACK],
-  }
-})
-export const fetchSprayApplications = () => ({
-  [CALL_API]: {
-    authenticated: true,
-    endpoint: 'spray-applications/',
-    method: 'GET',
-    payload: [],
-    types: [SPRAYAPPLICATIONS_FETCH_REQUEST, SPRAYAPPLICATIONS_FETCH_COMMIT, SPRAYAPPLICATIONS_FETCH_ROLLBACK],
   }
 })
 

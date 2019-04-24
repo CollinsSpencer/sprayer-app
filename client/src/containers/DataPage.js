@@ -18,7 +18,7 @@ import {
   fetchSprays
 } from '../actions'
 
-/*const dataSet2 = [
+const dataSet = [
     {
         Owner_Name: 'Ron Swanson',
         Date: '07/21/2018',
@@ -63,22 +63,19 @@ import {
         Field_Name: 'Liberty',
         Field_Acres: 24
     }
-];*/
+];
 
 class DataPage extends Component {
   componentDidMount() {
-    this.props.fetchFieldSeasons()
-    this.props.fetchFields()
-    this.props.fetchOwners()
-    this.props.fetchSprayApplications()
+    const { fetchFieldSeasons, fetchFields, fetchOwners, fetchSprayApplications } = this.props
+
+    fetchFieldSeasons()
+    fetchFields()
+    fetchOwners()
+    fetchSprayApplications()
   }
   render() {
-    var displaySet = [];
-    const dataSet = this.props
-
-    for (var i = 0; i < dataSet.length; i++) {
-      displaySet.push(<DisplayData key={i} data={dataSet[i]}/>)
-  	}
+    const displaySet = dataSet.map((d, i) => <DisplayData key={i} data={d} />)
 
     return (
     	<Container>
@@ -93,7 +90,7 @@ class DataPage extends Component {
 	      	<Table striped bordered hover>
 	      		<thead>
 	      			<tr>
-		      			<th>Owner</th>
+		      		  <th>Owner</th>
 		      			<th>Date</th>
 		      			<th>Field</th>
 		      			<th>Acres</th>
@@ -114,11 +111,8 @@ class DataPage extends Component {
 
 const mapStateToProps = (state) => {
   console.log(state)
-  const fieldSeasons = state.fieldSeasons
-  const fields = state.fields
-  const owners = state.owners
-  const sprayApplications = state.sprayApplications
-  const sprays = state.sprays
+  //TODO- parse this
+  const { fieldSeasons, fields, owners, sprayApplications, sprays } = state
   return {
     dataSet: fieldSeasons
   }
