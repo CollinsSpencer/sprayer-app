@@ -23,12 +23,15 @@ import {
   OWNERS_FETCH_COMMIT,
   PRICE_UNITS_SET,
   PRICE_VALUE_SET,
-  SPRAYAPPLICATIONS_FETCH_COMMIT,
   SPRAY_SET,
   SPRAYS_ADD_REQUEST,
   SPRAYS_ADD_COMMIT,
   SPRAYS_ADD_ROLLBACK,
   SPRAYS_FETCH_COMMIT,
+  SPRAYAPPLICATIONS_FETCH_COMMIT,
+  SPRAYAPPLICATIONS_ADD_REQUEST,
+  SPRAYAPPLICATIONS_ADD_COMMIT,
+  SPRAYAPPLICATIONS_ADD_ROLLBACK,
 
   // Other Constants
   Modes,
@@ -267,6 +270,23 @@ const sprayApplications = (state = [], action) => {
   switch (action.type) {
     case SPRAYAPPLICATIONS_FETCH_COMMIT:
       return action.payload.results
+    case SPRAYAPPLICATIONS_ADD_REQUEST:
+      return [
+        ...state,
+        {
+          id: action.payload.id,
+          name: action.payload.name,
+          syncing: true,
+        }
+      ]
+    case SPRAYAPPLICATIONS_ADD_COMMIT:
+      return [...state].map(s => s.id === action.meta.id ? {
+        ...s,
+        id: action.payload.id,
+        syncing: false
+      } : s)
+    case SPRAYAPPLICATIONS_ADD_ROLLBACK:
+      return [...state].filter(s => s.id !== action.meta.id)
     default:
       return state
   }
