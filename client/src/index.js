@@ -6,7 +6,6 @@ import Root from './containers/Root'
 import * as serviceWorker from './serviceWorker'
 import configureStore from './store/configureStore'
 import 'bootstrap/dist/css/bootstrap.css'
-
 // import {
   // addField,
   // setModeToPlanting,

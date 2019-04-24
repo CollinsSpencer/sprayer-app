@@ -2,13 +2,19 @@ import fetch from 'cross-fetch'
 
 const BASE_URL = 'http://localhost:8000/api/'
 
-export const NetworkError = (response, status) => {
-  this.name = 'NetworkError';
-  this.status = status;
-  this.response = response;
+class NetworkError extends Error {
+  constructor(response, status) {
+    super(response);
+    this.status = status;
+    this.response = response;
+    this.name = this.constructor.name;
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, this.constructor);
+    } else { 
+      this.stack = (new Error(response)).stack; 
+    }
+  }
 }
-
-NetworkError.prototype = Error.prototype;
 
 const tryParseJSON = (json) => {
   if (!json) {
@@ -78,6 +84,7 @@ export const apiEffect = (effect, _action) => {
       return getResponseBody(res);
     }
     return getResponseBody(res).then(body => {
+      console.log(body)
       throw new NetworkError(body || '', res.status);
     });
   });
@@ -87,6 +94,7 @@ export const apiDiscard = async (error, _action, _retries) => {
   if (error === null || error.status === null) return false;
 
   console.group("Error group")
+  console.log(error)
   console.log(error.status)
   console.groupEnd()
   if (error.status === 401) {
@@ -99,5 +107,5 @@ export const apiDiscard = async (error, _action, _retries) => {
 }
 
 export const apiPersistOptions = {
-  blacklist: ['auth'],
+  blacklist: ['auth', 'offline'],
 }
