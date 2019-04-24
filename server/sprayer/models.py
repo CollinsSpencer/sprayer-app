@@ -1,18 +1,14 @@
-import uuid
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
 
 class Spray(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=40)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 class Owner(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -20,7 +16,6 @@ class Owner(models.Model):
 
 
 class Field(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(Owner, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -32,7 +27,6 @@ class FieldSeason(models.Model):
         ('BEANS', 'Soybeans'),
         ('KALE', 'Kale'),
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     crop_type = models.CharField(max_length=5, choices=CROP_TYPES)
     num_acres = models.DecimalField(max_digits=8, decimal_places=2)
     start_date = models.DateField()
@@ -41,7 +35,6 @@ class FieldSeason(models.Model):
 
 
 class SprayApplication(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cost = models.IntegerField()  # In cents
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True, editable=False)

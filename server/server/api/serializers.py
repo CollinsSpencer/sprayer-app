@@ -7,7 +7,7 @@ from sprayer.models import Spray, SprayApplication, Owner, Field, FieldSeason
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'email', 'groups')
+        fields = ('url', 'username', 'email', 'groups')
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,7 +40,7 @@ class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = SprayApplication
-        fields = ('id', 'cost', 'amount', 'date', 'spray', 'field_season')
+        fields = ('cost', 'amount', 'date', 'spray', 'field_season')
 
 
 class OwnerSerializer(serializers.HyperlinkedModelSerializer):
@@ -73,4 +73,4 @@ class FieldSeasonSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = FieldSeason
-        fields = ('id', 'crop_type', 'num_acres', 'start_date', 'end_date', 'field')
+        fields = ('crop_type', 'num_acres', 'start_date', 'end_date', 'field')
