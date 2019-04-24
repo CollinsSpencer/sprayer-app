@@ -4,33 +4,25 @@ import { withRouter } from 'react-router-dom'
 import Select from 'react-select'
 
 import {
-  setUnitsToGallons,
-  setUnitsToOunces,
-  setUnitsToLiters,
+  Units,
 } from '../actions'
 
 const units = [
-  { value: setUnitsToGallons, label: 'Gallons' },
-  { value: setUnitsToOunces, label: 'Ounces' },
-  { value: setUnitsToLiters, label: 'Liters' }
+  { value: Units.GALLONS, label: 'Gallons' },
+  { value: Units.OUNCES, label: 'Ounces' },
+  { value: Units.LITERS, label: 'Liters' }
 ];
 
 class UnitSelector extends Component {
-  state = {
-    selectedOption: units[0]
-  }
   handleChange = (selectedOption) => {
-    this.setState({ selectedOption });
-    console.log(this.state.selectedOption.value)
+    this.props.callbackAction(selectedOption.value)
   }
   render() {
-    const { selectedOption } = this.state;
-
+    const selectedValue = units.find(u => u.value === this.props.selectedValue)
     return (
       <div>
-        Unit
         <Select
-          value={selectedOption}
+          value={selectedValue}
           onChange={this.handleChange}
           options={units}
         />
@@ -39,15 +31,4 @@ class UnitSelector extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { unit } = state
-  return { currentUnit: unit }
-}
-
-const mapDispatchToProps = {
-  setUnitsToGallons,
-  setUnitsToOunces,
-  setUnitsToLiters,
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UnitSelector))
+export default withRouter(connect()(UnitSelector))

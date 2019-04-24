@@ -5,8 +5,8 @@ import CreatableSelect from 'react-select/lib/Creatable'
 
 import {
   addField,
-  setField,
   fetchFields,
+  setField,
 } from '../actions'
 
 
@@ -19,7 +19,6 @@ class FieldSelector extends Component {
 
     return (
       <div>
-        Field:
         <CreatableSelect
           options={options}
           onChange={setField}
@@ -33,9 +32,11 @@ class FieldSelector extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { field, fields } = state
+  const { owner, field, fields } = state
   return {
-    options: fields.map(field => {
+    options: fields
+      // .reduce(field => field.owner === owner) // TODO
+      .map(field => {
       return { label: field.name, value: field.id }
     }),
     selectedField: field,
@@ -44,8 +45,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   addField,
-  setField,
   fetchFields,
+  setField,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FieldSelector))

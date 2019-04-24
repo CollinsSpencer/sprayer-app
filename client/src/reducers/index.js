@@ -1,30 +1,47 @@
 import { combineReducers } from 'redux'
 import {
   // Action types
+  AMOUNT_UNITS_SET,
+  AMOUNT_VALUE_SET,
   AUTH_UPDATED,
   MODE_SET,
   FIELD_SET,
   FIELDS_ADD_REQUEST,
   FIELDS_ADD_COMMIT,
   FIELDS_ADD_ROLLBACK,
-  FIELDS_FETCH_REQUEST,
   FIELDS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
-  UNITS_SET,
   OWNER_SET,
-  OWNER_ADD,
+  OWNERS_ADD_REQUEST,
+  OWNERS_ADD_COMMIT,
+  OWNERS_ADD_ROLLBACK,
+  OWNERS_FETCH_COMMIT,
+  PRICE_UNITS_SET,
+  PRICE_VALUE_SET,
   SPRAY_SET,
   SPRAYS_ADD_REQUEST,
   SPRAYS_ADD_COMMIT,
   SPRAYS_ADD_ROLLBACK,
+  SPRAYS_FETCH_COMMIT,
 
   // Other Constants
   Modes,
-  Units,
 } from '../actions'
+
+const amount = (state = {}, action) => {
+  switch (action.type) {
+    case AMOUNT_UNITS_SET:
+      return { ...state, units: action.units }
+    case AMOUNT_VALUE_SET:
+      return { ...state, value: action.value }
+    default:
+      return state
+  }
+}
 
 const auth = (state = {
   isFetching: false,
@@ -77,15 +94,6 @@ const mode = (state = Modes.SPRAYING, action) => {
   }
 }
 
-const unit = (state = Units.GALLONS, action) => {
-  switch (action.type) {
-    case UNITS_SET:
-      return action.unit
-    default:
-      return state
-  }
-}
-
 const field = (state = '', action) => {
   switch (action.type) {
     case FIELD_SET:
@@ -97,10 +105,6 @@ const field = (state = '', action) => {
 
 const fields = (state = [], action) => {
   switch (action.type) {
-    case FIELDS_FETCH_REQUEST:
-      return action.payload
-    case FIELDS_FETCH_COMMIT:
-      return action.payload.results
     case FIELDS_ADD_REQUEST:
       return [
         ...state,
@@ -120,6 +124,8 @@ const fields = (state = [], action) => {
       } : f)
     case FIELDS_ADD_ROLLBACK:
       return [...state].filter(f => f.id !== action.meta.id)
+    case FIELDS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }
@@ -128,7 +134,25 @@ const fields = (state = [], action) => {
 const owner = (state = '', action) => {
   switch (action.type) {
     case OWNER_SET:
-      return action.id
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case OWNERS_ADD_REQUEST:
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: true,
+      }
+    case OWNERS_ADD_COMMIT:
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case OWNERS_ADD_ROLLBACK:
+      return ''
     default:
       return state
   }
@@ -136,14 +160,36 @@ const owner = (state = '', action) => {
 
 const owners = (state = [], action) => {
   switch (action.type) {
-    case OWNER_ADD:
+    case OWNERS_ADD_REQUEST:
       return [
         ...state,
         {
           id: action.payload.id,
           name: action.payload.name,
+          syncing: true,
         }
       ]
+    case OWNERS_ADD_COMMIT:
+      return [...state].map(o => o.id === action.meta.id ? {
+        ...o,
+        id: action.payload.id,
+        syncing: false
+      } : o)
+    case OWNERS_ADD_ROLLBACK:
+      return [...state].filter(o => o.id !== action.meta.id)
+    case OWNERS_FETCH_COMMIT:
+      return action.payload.results
+    default:
+      return state
+  }
+}
+
+const price = (state = {}, action) => {
+  switch (action.type) {
+    case PRICE_UNITS_SET:
+      return { ...state, units: action.units }
+    case PRICE_VALUE_SET:
+      return { ...state, value: action.value }
     default:
       return state
   }
@@ -152,7 +198,25 @@ const owners = (state = [], action) => {
 const spray = (state = '', action) => {
   switch (action.type) {
     case SPRAY_SET:
-      return action.id
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case SPRAYS_ADD_REQUEST:
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: true,
+      }
+    case SPRAYS_ADD_COMMIT:
+      return {
+        id: action.payload.id,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case SPRAYS_ADD_ROLLBACK:
+      return ''
     default:
       return state
   }
@@ -181,21 +245,31 @@ const sprays = (state = [], action) => {
       // We have decided to stop retrying to sync the data.
       // Remove the item completely from the list.
       return [...state].filter(s => s.id !== action.meta.id)
+    case SPRAYS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }
 }
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
+  amount,
   auth,
   mode,
-  unit,
   field,
   fields,
   owner,
   owners,
+  price,
   spray,
   sprays,
 })
+
+const rootReducer = (state, action) => {
+  if (action.type === LOGOUT_REQUEST) {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
 
 export default rootReducer

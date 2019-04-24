@@ -6,6 +6,8 @@ import { CALL_API } from '../middleware/api'
  * action types
  */
 
+export const AMOUNT_UNITS_SET = 'AMOUNT_UNITS_SET'
+export const AMOUNT_VALUE_SET = 'AMOUNT_VALUE_SET'
 export const AUTH_UPDATED = 'AUTH_UPDATED'
 export const FIELD_SET = 'FIELD_SET'
 export const FIELDS_ADD_REQUEST = 'FIELDS_ADD_REQUEST'
@@ -22,12 +24,21 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 export const MODE_SET = 'MODE_SET'
 export const OWNER_SET = 'OWNER_SET'
-export const OWNER_ADD = 'OWNER_ADD'
+export const OWNERS_ADD_REQUEST = 'OWNERS_ADD_REQUEST'
+export const OWNERS_ADD_COMMIT = 'OWNERS_ADD_COMMIT'
+export const OWNERS_ADD_ROLLBACK = 'OWNERS_ADD_ROLLBACK'
+export const OWNERS_FETCH_REQUEST = 'OWNERS_FETCH_REQUEST'
+export const OWNERS_FETCH_COMMIT = 'OWNERS_FETCH_COMMIT'
+export const OWNERS_FETCH_ROLLBACK = 'OWNERS_FETCH_ROLLBACK'
+export const PRICE_UNITS_SET = 'PRICE_UNITS_SET'
+export const PRICE_VALUE_SET = 'PRICE_VALUE_SET'
 export const SPRAY_SET = 'SPRAY_SET'
 export const SPRAYS_ADD_REQUEST = 'SPRAYS_ADD_REQUEST'
 export const SPRAYS_ADD_COMMIT = 'SPRAYS_ADD_COMMIT'
 export const SPRAYS_ADD_ROLLBACK = 'SPRAYS_ADD_ROLLBACK'
-export const UNITS_SET = 'UNITS_SET'
+export const SPRAYS_FETCH_REQUEST = 'SPRAYS_FETCH_REQUEST'
+export const SPRAYS_FETCH_COMMIT = 'SPRAYS_FETCH_COMMIT'
+export const SPRAYS_FETCH_ROLLBACK = 'SPRAYS_FETCH_ROLLBACK'
 
 /*
  * other constants
@@ -46,53 +57,44 @@ export const Units = {
 }
 
 /*
- * action creators
+ * private action creators
  */
 
-const requestLogin = (creds) => {
-  return {
-    type: LOGIN_REQUEST,
-    isFetching: true,
-    isAuthenticated: false,
-    creds
-  }
-}
-const receiveLogin = (user) => {
-  return {
-    type: LOGIN_SUCCESS,
-    isFetching: false,
-    isAuthenticated: true,
-    id_token: user.id_token
-  }
-}
-const loginError = (message) => {
-  return {
-    type: LOGIN_FAILURE,
-    isFetching: false,
-    isAuthenticated: false,
-    message
-  }
-}
-const requestLogout = () => {
-  return {
-    type: LOGOUT_REQUEST,
-    isFetching: true,
-    isAuthenticated: true
-  }
-}
-const receiveLogout = () => {
-  return {
-    type: LOGOUT_SUCCESS,
-    isFetching: false,
-    isAuthenticated: false
-  }
-}
-export const setModeToPlanting = () => ({ type: MODE_SET, mode: Modes.PLANTING })
-export const setModeToSpraying = () => ({ type: MODE_SET, mode: Modes.SPRAYING })
-export const setModeToHarvesting = () => ({ type: MODE_SET, mode: Modes.HARVESTING })
-export const setUnitsToGallons = () => ({ type: UNITS_SET, unit: Units.GALLONS })
-export const setUnitsToOunces = () => ({ type: UNITS_SET, unit: Units.OUNCES })
-export const setUnitsToLiters = () => ({ type: UNITS_SET, unit: Units.LITERS })
+const requestLogin = (creds) => ({
+  type: LOGIN_REQUEST,
+  isFetching: true,
+  isAuthenticated: false,
+  creds
+})
+const receiveLogin = (user) => ({
+  type: LOGIN_SUCCESS,
+  isFetching: false,
+  isAuthenticated: true,
+  id_token: user.id_token
+})
+const loginError = (message) => ({
+  type: LOGIN_FAILURE,
+  isFetching: false,
+  isAuthenticated: false,
+  message
+})
+const requestLogout = () => ({
+  type: LOGOUT_REQUEST,
+  isFetching: true,
+  isAuthenticated: true
+})
+const receiveLogout = () => ({
+  type: LOGOUT_SUCCESS,
+  isFetching: false,
+  isAuthenticated: false
+})
+
+/*
+ * public action creators
+ */
+
+export const setAmountUnits = (units) => ({ type: AMOUNT_UNITS_SET, units })
+export const setAmountValue = (value) => ({ type: AMOUNT_VALUE_SET, value })
 export const setField = (id) => ({ type: FIELD_SET, id: id })
 export const addField = (field_name) => ({
   [CALL_API]: {
@@ -108,9 +110,43 @@ export const addField = (field_name) => ({
     types: [FIELDS_ADD_REQUEST, FIELDS_ADD_COMMIT, FIELDS_ADD_ROLLBACK],
   }
 })
-export const setOwner = (id) => ({ type: OWNER_SET, id: id })
-export const addOwner = (owner_name) => ({ type: OWNER_ADD, owner_name: owner_name })
-export const setSpray = (id) => ({ type: SPRAY_SET, id: id })
+export const fetchFields = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'fields/',
+    method: 'GET',
+    payload: [],
+    types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+  }
+})
+export const setModeToPlanting = () => ({ type: MODE_SET, mode: Modes.PLANTING })
+export const setModeToSpraying = () => ({ type: MODE_SET, mode: Modes.SPRAYING })
+export const setModeToHarvesting = () => ({ type: MODE_SET, mode: Modes.HARVESTING })
+export const setOwner = (owner) => ({ type: OWNER_SET, payload: owner })
+export const addOwner = (owner_name) => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'owners/',
+    method: 'POST',
+    json: {
+      id: uuidv4(),
+      name: owner_name,
+    },
+    types: [OWNERS_ADD_REQUEST, OWNERS_ADD_COMMIT, OWNERS_ADD_ROLLBACK],
+  }
+})
+export const fetchOwners = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'owners/',
+    method: 'GET',
+    payload: [],
+    types: [OWNERS_FETCH_REQUEST, OWNERS_FETCH_COMMIT, OWNERS_FETCH_ROLLBACK],
+  }
+})
+export const setPriceUnits = (units) => ({ type: PRICE_UNITS_SET, units })
+export const setPriceValue = (value) => ({ type: PRICE_VALUE_SET, value })
+export const setSpray = (spray) => ({ type: SPRAY_SET, payload: spray })
 export const addSpray = (spray_name) => ({
   [CALL_API]: {
     authenticated: true,
@@ -123,13 +159,13 @@ export const addSpray = (spray_name) => ({
     types: [SPRAYS_ADD_REQUEST, SPRAYS_ADD_COMMIT, SPRAYS_ADD_ROLLBACK],
   }
 })
-export const fetchFields = () => ({
+export const fetchSprays = () => ({
   [CALL_API]: {
     authenticated: true,
-    endpoint: 'fields/',
+    endpoint: 'sprays/',
     method: 'GET',
     payload: [],
-    types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+    types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
 
@@ -150,7 +186,6 @@ export const loginUser = (creds) => {
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
-
     return fetch('http://localhost:8000/api/token/', config)
       .then(response =>
         response.json().then(user => ({ user, response }))

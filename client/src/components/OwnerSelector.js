@@ -1,40 +1,62 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import CreatableSelect from 'react-select/lib/Creatable'
+import CreatableSelect  from 'react-select/lib/Creatable'
 
 import {
   addOwner,
+  fetchOwners,
   setOwner,
 } from '../actions'
 
-const OwnerSelector = ({ options, selectedOwner, addOwner, setOwner }) => {
-  return (
-    <div>
-      Owner:
-      <CreatableSelect
-        options={options}
-        onChange={setOwner}
-        onCreateOption={addOwner}
-        value={selectedOwner}
-        placeholder="Select Field Owner"
-      />
-    </div>
-  )
+class OwnerSelector extends Component {
+  componentDidMount() {
+    this.props.fetchOwners()
+  }
+  changeHandler = (newValue, action) => {
+    const { addOwner, setOwner } = this.props
+    if (action.action === 'create-option') {
+      addOwner(newValue.label)
+    } else {
+      setOwner({
+        name: newValue.label,
+        id: newValue.value,
+      })  
+    }
+  }
+  render() {
+    const { options, selectedOwner } = this.props
+  
+    return (
+      <div>
+        <CreatableSelect
+          options={options}
+          onChange={this.changeHandler}
+          value={selectedOwner}
+          placeholder="Select Field Owner"
+        />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
   const { owner, owners } = state
+  let selectedOwner = ''
+  if (Object.keys(owner).length > 0) {
+    selectedOwner = { label: owner.name, value: owner.id }
+  }
   return {
     options: owners.map(owner => {
       return { label: owner.name, value: owner.id }
     }),
-    selectedOwner: owner,
+    selectedOwner: selectedOwner,
   }
 }
 
 const mapDispatchToProps = {
   addOwner,
+  fetchOwners,
   setOwner,
 }
 
