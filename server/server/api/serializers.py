@@ -44,7 +44,7 @@ class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OwnerSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
+    id = serializers.UUIDField(required=False)
 
     class Meta:
         model = Owner
@@ -63,7 +63,15 @@ class FieldSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'owner', 'user')
 
     def create(self, validated_data):
-        owner, created = Owner.objects.get_or_create(name=validated_data.pop('owner')['name'])
+        owner_data = validated_data.pop('owner')
+        if 'id' in owner_data.keys():
+            if Owner.objects.filter(id=owner_data['id']).exists():
+                owner = Owner.objects.get(id=owner_data['id'])
+            else:
+                owner = Owner.objects.create(name=owner_data['name'])
+        else:
+            owner = Owner.objects.create(name=owner_data['name'])
+
         instance = Field.objects.create(**validated_data, owner=owner)
         return instance
 
