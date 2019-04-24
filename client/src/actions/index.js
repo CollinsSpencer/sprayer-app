@@ -14,6 +14,9 @@ export const FIELDS_ADD_ROLLBACK = 'FIELDS_ADD_ROLLBACK'
 export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
 export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
 export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
+export const FIELDSEASONS_FETCH_REQUEST = 'FIELDSEASONS_FETCH_REQUEST'
+export const FIELDSEASONS_FETCH_COMMIT = 'FIELDSEASONS_FETCH_COMMIT'
+export const FIELDSEASONS_FETCH_ROLLBACK = 'FIELDSEASONS_FETCH_ROLLBACK'
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
@@ -130,6 +133,15 @@ export const fetchFields = () => ({
     method: 'GET',
     payload: [],
     types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+  }
+})
+export const fetchFieldSeasons = () => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'field-seasons/',
+    method: 'GET',
+    payload: [],
+    types: [FIELDSEASONS_FETCH_REQUEST, FIELDSEASONS_FETCH_COMMIT, FIELDSEASONS_FETCH_ROLLBACK],
   }
 })
 

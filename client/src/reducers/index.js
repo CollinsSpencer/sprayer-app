@@ -9,6 +9,8 @@ import {
   FIELDS_ADD_ROLLBACK,
   FIELDS_FETCH_REQUEST,
   FIELDS_FETCH_COMMIT,
+  FIELDSEASONS_FETCH_REQUEST,
+  FIELDSEASONS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -125,6 +127,17 @@ const fields = (state = [], action) => {
   }
 }
 
+const fieldSeasons = (state = [], action) => {
+  switch (action.type) {
+    case FIELDSEASONS_FETCH_REQUEST:
+      return action.payload
+    case FIELDSEASONS_FETCH_COMMIT:
+      return action.payload.results
+    default:
+      return state
+  }
+}
+
 const owner = (state = '', action) => {
   switch (action.type) {
     case OWNER_SET:
@@ -192,6 +205,7 @@ const rootReducer = combineReducers({
   unit,
   field,
   fields,
+  fieldSeasons,
   owner,
   owners,
   spray,

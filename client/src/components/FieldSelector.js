@@ -16,7 +16,6 @@ class FieldSelector extends Component {
   }
   render() {
     const { options, selectedField, addField, setField } = this.props
-
     return (
       <div>
         Field:

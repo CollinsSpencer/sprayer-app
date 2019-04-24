@@ -6,42 +6,67 @@ const ExcelFile = ReactExport.ExcelFile
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn
 
-const exampleSet = [
+const sprayApplication = [
     {
-        product: "Product 1",
-        price: 44.99,
-        amount: 0,
-        cost: 0
+        Owner_Name: 'Ron Swanson',
+        Date: '07/21/2018',
+        Spray: "Old Spice",
+        Cost: 4.50,
+        Cost_Unit: 'gal',
+        Usage_Amount: 1.04,
+        Usage_Unit: 'gal',
+        Field_Name: 'Thunder',
+        Field_Acres: 15
     },
     {
-        product: "Product 2",
-        price: 36.74,
-        amount: 23.38,
-        cost: 858.98
+        Owner_Name: 'Ron Swanson',
+        Date: '07/22/2018',
+        Spray: "Dove",
+        Cost: 1.20,
+        Cost_Unit: 'oz',
+        Usage_Amount: 12.04,
+        Usage_Unit: 'oz',
+        Field_Name: 'Grassy Boi',
+        Field_Acres: 8.2
     },
     {
-        product: "Product 3",
-        price: 26.9,
-        amount: 34.72,
-        cost: 933.97
+        Owner_Name: 'Bob Vance',
+        Date: '06/01/2018',
+        Spray: "Old Spice",
+        Cost: 4.50,
+        Cost_Unit: 'gal',
+        Usage_Amount: 4.18,
+        Usage_Unit: 'gal',
+        Field_Name: 'Thunder',
+        Field_Acres: 18.4
     },
     {
-        product: "Product 4",
-        price: 42.96,
-        amount: 4.75,
-        cost: 204.06
+        Owner_Name: 'Jessica Day',
+        Date: '07/10/2018',
+        Spray: "Axe",
+        Cost: 3.45,
+        Cost_Unit: 'liter',
+        Usage_Amount: 9.1,
+        Usage_Unit: 'liter',
+        Field_Name: 'Liberty',
+        Field_Acres: 24
     }
 ];
 
 class DownloadSheet extends Component {
   render() {
     return (
-      <ExcelFile>
-        <ExcelSheet data={exampleSet} name="Summary">
-            <ExcelColumn label="Product" value="product"/>
-            <ExcelColumn label="Price" value="price"/>
-            <ExcelColumn label="Amount Used" value="amount"/>
-            <ExcelColumn label="Cost" value="cost"/>
+      <ExcelFile filename="DataAnalysis">
+        <ExcelSheet data={sprayApplication} name="Summary">
+            <ExcelColumn label="Owner" value="Owner_Name"/>
+            <ExcelColumn label="Date" value="Date"/>
+            <ExcelColumn label="Field Name" value="Field_Name"/>
+            <ExcelColumn label="Acres" value="Field_Acres"/>
+            <ExcelColumn label="Spray" value="Spray"/>
+            <ExcelColumn label="Cost" value="Cost"/>
+            <ExcelColumn label="Cost Unit" value="Cost_Unit"/>
+            <ExcelColumn label="Usage" value="Usage_Amount"/>
+            <ExcelColumn label="Usage Unit" value="Usage_Unit"/>
         </ExcelSheet>
     </ExcelFile>
     )
