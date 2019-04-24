@@ -168,6 +168,25 @@ export const fetchSprays = () => ({
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
+export const addSprayApplication = () => {
+  const cost = ''
+  const amount = ''
+  const spray = ''
+  return {
+    [CALL_API]: {
+      authenticated: true,
+      endpoint: 'spray-applications/',
+      method: 'POST',
+      json: {
+        id: uuidv4(),
+        cost,
+        amount,
+        spray,
+      },
+      types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
+    }
+  }
+}
 
 /*
  * thunk action creators

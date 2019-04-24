@@ -13,13 +13,15 @@ import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
 import SprayForm from '../components/SprayForm'
 import SprayBar from '../components/SprayBar'
-
+import {
+  addSprayApplication,
+} from '../actions'
 /*https://itnext.io/building-a-dynamic-controlled-form-in-react-together-794a44ee552c*/
 
 class RecordPage extends Component {
   handleClick(e) {
     e.preventDefault()
-    // this.props.addSprayApplication() // TODO
+    this.props.addSprayApplication() // TODO
   }
 
   render() {
@@ -83,7 +85,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  // addSprayApplication,
+  addSprayApplication,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RecordPage))
