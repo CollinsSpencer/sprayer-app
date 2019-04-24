@@ -16,11 +16,18 @@ import SprayBar from '../components/SprayBar'
 import {
   addSprayApplication,
 } from '../actions'
+import {
+  priceConverter,
+  amountConverter,
+} from '../utilities'
 
 class RecordPage extends Component {
-  handleClick(e) {
+  handleSubmit(e) {
     e.preventDefault()
-    this.props.addSprayApplication() // TODO
+    const { amount, price, spray } = this.props
+    const convertedCost = priceConverter(price.value, price.units)
+    const convertedAmount = amountConverter(amount.value, amount.units)
+    this.props.addSprayApplication(convertedCost, convertedAmount, spray)
   }
 
   render() {
@@ -59,7 +66,7 @@ class RecordPage extends Component {
               <Button
                 type="submit"
                 variant="primary"
-                onClick={(event) => this.handleClick(event)}
+                onClick={(event) => this.handleSubmit(event)}
               >
                 Submit
               </Button>
@@ -72,9 +79,12 @@ class RecordPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { owner } = state
+  const { amount, price, owner, spray } = state
   return {
+    amount,
+    price,
     owner,
+    spray,
   }
 }
 

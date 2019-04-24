@@ -186,10 +186,7 @@ export const fetchSprays = () => ({
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
-export const addSprayApplication = () => {
-  const cost = ''
-  const amount = ''
-  const spray = ''
+export const addSprayApplication = (cost, amount, spray) => {
   return {
     [CALL_API]: {
       authenticated: true,

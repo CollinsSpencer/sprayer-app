@@ -77,7 +77,7 @@ class RecordForm extends Component {
             />
           </Col>
           <Col>
-            <Form.Label>Per Unit</Form.Label>
+            <Form.Label>In Units</Form.Label>
             <UnitSelector
               callbackAction={setAmountUnits}
               selectedValue={amountUnits}
