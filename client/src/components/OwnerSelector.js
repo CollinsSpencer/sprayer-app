@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import CreatableSelect  from 'react-select/lib/Creatable'
+import CreatableSelect from 'react-select/lib/Creatable'
 
 import {
   addOwner,
@@ -21,12 +21,12 @@ class OwnerSelector extends Component {
       setOwner({
         name: newValue.label,
         id: newValue.value,
-      })  
+      })
     }
   }
   render() {
     const { options, selectedOwner } = this.props
-  
+
     return (
       <div>
         <CreatableSelect

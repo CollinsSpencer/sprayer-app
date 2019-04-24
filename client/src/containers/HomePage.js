@@ -15,7 +15,7 @@ class HomePage extends Component {
     return (
       <Container>
         <SprayBar></SprayBar>
-        <Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <RecentData></RecentData>
         </Row>
       </Container>

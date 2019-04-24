@@ -29,12 +29,12 @@ class LoginPage extends Component {
 
     return (
       <Container>
-        <Row style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+        <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Form>
             <Form.Row>
               <Col xs={5} md={4}>
               </Col>
-              <Col xs={8} md={4} style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+              <Col xs={8} md={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <h2>Login</h2>
               </Col>
               <Col xs={5} md={4}>
@@ -47,7 +47,7 @@ class LoginPage extends Component {
               <input type="password" ref="password" className="form-control" placeholder="Password" />
             </Form.Row>
             <Form.Row>
-              <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+              <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Button
                   variant="primary"
                   onClick={(event) => this.handleClick(event)}

@@ -16,7 +16,6 @@ import SprayBar from '../components/SprayBar'
 import {
   addSprayApplication,
 } from '../actions'
-/*https://itnext.io/building-a-dynamic-controlled-form-in-react-together-794a44ee552c*/
 
 class RecordPage extends Component {
   handleClick(e) {
@@ -55,11 +54,6 @@ class RecordPage extends Component {
             </Col>
           </Form.Row>
           <SprayForm></SprayForm>
-          {/*<Form.Row>
-            <Col style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-              <Button variant="primary" onClick={this.addSpray}>Add Spray</Button>
-            </Col>
-          </Form.Row>*/}
           <Form.Row>
             <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button

@@ -16,7 +16,6 @@ class FieldSelector extends Component {
   }
   render() {
     const { options, selectedField, addField, setField } = this.props
-
     return (
       <div>
         <CreatableSelect
@@ -37,8 +36,8 @@ const mapStateToProps = (state) => {
     options: fields
       // .reduce(field => field.owner === owner) // TODO
       .map(field => {
-      return { label: field.name, value: field.id }
-    }),
+        return { label: field.name, value: field.id }
+      }),
     selectedField: field,
   }
 }

@@ -4,17 +4,18 @@ import {
   AMOUNT_UNITS_SET,
   AMOUNT_VALUE_SET,
   AUTH_UPDATED,
-  MODE_SET,
   FIELD_SET,
   FIELDS_ADD_REQUEST,
   FIELDS_ADD_COMMIT,
   FIELDS_ADD_ROLLBACK,
   FIELDS_FETCH_COMMIT,
+  FIELDSEASONS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
+  MODE_SET,
   OWNER_SET,
   OWNERS_ADD_REQUEST,
   OWNERS_ADD_COMMIT,
@@ -22,6 +23,7 @@ import {
   OWNERS_FETCH_COMMIT,
   PRICE_UNITS_SET,
   PRICE_VALUE_SET,
+  SPRAYAPPLICATIONS_FETCH_COMMIT,
   SPRAY_SET,
   SPRAYS_ADD_REQUEST,
   SPRAYS_ADD_COMMIT,
@@ -131,6 +133,15 @@ const fields = (state = [], action) => {
   }
 }
 
+const fieldSeasons = (state = [], action) => {
+  switch (action.type) {
+    case FIELDSEASONS_FETCH_COMMIT:
+      return action.payload.results
+    default:
+      return state
+  }
+}
+
 const owner = (state = '', action) => {
   switch (action.type) {
     case OWNER_SET:
@@ -169,6 +180,8 @@ const owners = (state = [], action) => {
           syncing: true,
         }
       ]
+    case OWNERS_FETCH_COMMIT:
+      return action.payload.results
     case OWNERS_ADD_COMMIT:
       return [...state].map(o => o.id === action.meta.id ? {
         ...o,
@@ -177,8 +190,6 @@ const owners = (state = [], action) => {
       } : o)
     case OWNERS_ADD_ROLLBACK:
       return [...state].filter(o => o.id !== action.meta.id)
-    case OWNERS_FETCH_COMMIT:
-      return action.payload.results
     default:
       return state
   }
@@ -224,6 +235,8 @@ const spray = (state = '', action) => {
 
 const sprays = (state = [], action) => {
   switch (action.type) {
+    case SPRAYS_FETCH_COMMIT:
+      return action.payload.results
     case SPRAYS_ADD_REQUEST:
       return [
         ...state,
@@ -245,7 +258,14 @@ const sprays = (state = [], action) => {
       // We have decided to stop retrying to sync the data.
       // Remove the item completely from the list.
       return [...state].filter(s => s.id !== action.meta.id)
-    case SPRAYS_FETCH_COMMIT:
+    default:
+      return state
+  }
+}
+
+const sprayApplications = (state = [], action) => {
+  switch (action.type) {
+    case SPRAYAPPLICATIONS_FETCH_COMMIT:
       return action.payload.results
     default:
       return state
@@ -258,11 +278,13 @@ const appReducer = combineReducers({
   mode,
   field,
   fields,
+  fieldSeasons,
   owner,
   owners,
   price,
   spray,
   sprays,
+  sprayApplications,
 })
 
 const rootReducer = (state, action) => {
