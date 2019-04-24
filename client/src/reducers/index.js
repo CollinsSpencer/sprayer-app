@@ -11,6 +11,10 @@ import {
   FIELDS_FETCH_COMMIT,
   FIELDSEASONS_FETCH_REQUEST,
   FIELDSEASONS_FETCH_COMMIT,
+  OWNERS_FETCH_REQUEST,
+  OWNERS_FETCH_COMMIT,
+  SPRAYAPPLICATIONS_FETCH_REQUEST,
+  SPRAYAPPLICATIONS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -22,6 +26,8 @@ import {
   SPRAYS_ADD_REQUEST,
   SPRAYS_ADD_COMMIT,
   SPRAYS_ADD_ROLLBACK,
+  SPRAYS_FETCH_REQUEST,
+  SPRAYS_FETCH_COMMIT,
 
   // Other Constants
   Modes,
@@ -157,6 +163,10 @@ const owners = (state = [], action) => {
           name: action.payload.name,
         }
       ]
+    case OWNERS_FETCH_REQUEST:
+      return action.payload
+    case OWNERS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }
@@ -173,6 +183,10 @@ const spray = (state = '', action) => {
 
 const sprays = (state = [], action) => {
   switch (action.type) {
+    case SPRAYS_FETCH_REQUEST:
+      return action.payload
+    case SPRAYS_FETCH_COMMIT:
+      return action.payload.results
     case SPRAYS_ADD_REQUEST:
       return [
         ...state,
@@ -199,6 +213,17 @@ const sprays = (state = [], action) => {
   }
 }
 
+const sprayApplications = (state = [], action) => {
+  switch (action.type) {
+    case SPRAYAPPLICATIONS_FETCH_REQUEST:
+      return action.payload
+    case SPRAYAPPLICATIONS_FETCH_COMMIT:
+      return action.payload.results
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   auth,
   mode,
@@ -210,6 +235,7 @@ const rootReducer = combineReducers({
   owners,
   spray,
   sprays,
+  sprayApplications,
 })
 
 export default rootReducer

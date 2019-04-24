@@ -12,6 +12,10 @@ import SprayBar from '../components/SprayBar'
 
 import {
   fetchFieldSeasons,
+  fetchFields,
+  fetchOwners,
+  fetchSprayApplications,
+  fetchSprays
 } from '../actions'
 
 /*const dataSet2 = [
@@ -64,6 +68,9 @@ import {
 class DataPage extends Component {
   componentDidMount() {
     this.props.fetchFieldSeasons()
+    this.props.fetchFields()
+    this.props.fetchOwners()
+    this.props.fetchSprayApplications()
   }
   render() {
     var displaySet = [];
@@ -106,7 +113,12 @@ class DataPage extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   const fieldSeasons = state.fieldSeasons
+  const fields = state.fields
+  const owners = state.owners
+  const sprayApplications = state.sprayApplications
+  const sprays = state.sprays
   return {
     dataSet: fieldSeasons
   }
@@ -114,6 +126,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   fetchFieldSeasons,
+  fetchFields,
+  fetchOwners,
+  fetchSprayApplications,
+  fetchSprays
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DataPage))
