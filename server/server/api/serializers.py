@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-
+import uuid
 from sprayer.models import Spray, Owner, Field, FieldSeason, SprayApplication
 
 
@@ -58,6 +58,7 @@ class FieldSerializer(serializers.ModelSerializer):
         owner, created = Owner.objects.get_or_create(
             uuid=owner_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'name': owner_data['name'],
                 'user': owner_data['user'],
             }
@@ -81,6 +82,7 @@ class FieldSeasonSerializer(serializers.ModelSerializer):
         owner, created = Owner.objects.get_or_create(
             uuid=owner_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'name': owner_data['name'],
                 'user': owner_data['user'],
             }
@@ -89,6 +91,7 @@ class FieldSeasonSerializer(serializers.ModelSerializer):
         field, created = Field.objects.get_or_create(
             uuid=field_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'owner': owner,
                 'name': field_data['name'],
             }
@@ -117,6 +120,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
         spray, created = Spray.objects.get_or_create(
             uuid=spray_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'name': spray_data['name'],
             }
         )
@@ -124,6 +128,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
         owner, created = Owner.objects.get_or_create(
             uuid=owner_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'name': owner_data['name'],
                 'user': owner_data['user'],
             }
@@ -132,6 +137,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
         field, created = Field.objects.get_or_create(
             uuid=field_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'owner': owner,
                 'name': field_data['name'],
             }
@@ -140,6 +146,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
         field_season, created = FieldSeason.objects.get_or_create(
             uuid=field_season_data.get('uuid', None),
             defaults={
+                'uuid': uuid.uuid4(),
                 'crop_type': field_season_data['crop_type'],
                 'num_acres': field_season_data['num_acres'],
                 'start_date': field_season_data['start_date'],
