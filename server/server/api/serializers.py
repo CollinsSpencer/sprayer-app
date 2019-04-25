@@ -122,7 +122,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
         )
 
         owner, created = Owner.objects.get_or_create(
-            uuid=owner_data['uuid'],
+            uuid=owner_data.get('uuid'),
             defaults={
                 'name': owner_data['name'],
                 'user': owner_data['user'],
