@@ -16,18 +16,12 @@ import SprayBar from '../components/SprayBar'
 import {
   addSprayApplication,
 } from '../actions'
-import {
-  priceConverter,
-  amountConverter,
-} from '../utilities'
 
 class RecordPage extends Component {
   handleSubmit(e) {
     e.preventDefault()
     const { amount, price, spray } = this.props
-    const convertedCost = priceConverter(price.value, price.units)
-    const convertedAmount = amountConverter(amount.value, amount.units)
-    this.props.addSprayApplication(convertedCost, convertedAmount, spray)
+    this.props.addSprayApplication(amount.value, amount.units, price.value, price.units, spray)
   }
 
   render() {
