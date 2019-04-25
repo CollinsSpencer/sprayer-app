@@ -8,20 +8,25 @@ from django.utils import timezone
 class Spray(models.Model):
     name = models.CharField(max_length=40)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
 
 class Owner(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ('name', 'user',)
 
 
 class Field(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
 
 class FieldSeason(models.Model):
@@ -35,6 +40,7 @@ class FieldSeason(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     field = models.ForeignKey(Field, on_delete=models.CASCADE)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
 
 class SprayApplication(models.Model):
@@ -44,6 +50,7 @@ class SprayApplication(models.Model):
     spray = models.ForeignKey(Spray, on_delete=models.PROTECT)
     field_season = models.ForeignKey(FieldSeason, on_delete=models.PROTECT)
     updated_at = models.DateTimeField(auto_now_add=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
