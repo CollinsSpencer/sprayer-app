@@ -4,19 +4,19 @@ from rest_framework import serializers
 from sprayer.models import Spray, Owner, Field, FieldSeason, SprayApplication
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('url', 'username', 'email', 'groups')
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
 
 
-class SpraySerializer(serializers.HyperlinkedModelSerializer):
+class SpraySerializer(serializers.ModelSerializer):
     # This is for being able to see the user_id in the request and not be able to set it
     # user = serializers.PrimaryKeyRelatedField(
     #     read_only=True,
@@ -33,14 +33,14 @@ class SpraySerializer(serializers.HyperlinkedModelSerializer):
         fields = ('uuid', 'name', 'user')
 
 
-class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):
+class SprayApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SprayApplication
         fields = ('uuid', 'cost', 'amount', 'date', 'spray', 'field_season')
 
 
-class OwnerSerializer(serializers.HyperlinkedModelSerializer):
+class OwnerSerializer(serializers.ModelSerializer):
     uuid = serializers.UUIDField(required=False)
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
@@ -71,7 +71,7 @@ class FieldSerializer(serializers.ModelSerializer):
         return instance
 
 
-class FieldSeasonSerializer(serializers.HyperlinkedModelSerializer):
+class FieldSeasonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldSeason
