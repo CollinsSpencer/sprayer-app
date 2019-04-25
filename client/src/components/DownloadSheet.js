@@ -11,56 +11,13 @@ import {
   fetchSprays
 } from '../actions'
 
+import {
+  calculateCost
+} from '../utilities'
+
 const ExcelFile = ReactExport.ExcelFile
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn
-
-const sprayApplication = [
-  {
-    Owner_Name: 'Ron Swanson',
-    Date: '07/21/2018',
-    Spray: "Old Spice",
-    Cost: 4.50,
-    Cost_Unit: 'gal',
-    Usage_Amount: 1.04,
-    Usage_Unit: 'gal',
-    Field_Name: 'Thunder',
-    Field_Acres: 15
-  },
-  {
-    Owner_Name: 'Ron Swanson',
-    Date: '07/22/2018',
-    Spray: "Dove",
-    Cost: 1.20,
-    Cost_Unit: 'oz',
-    Usage_Amount: 12.04,
-    Usage_Unit: 'oz',
-    Field_Name: 'Grassy Boi',
-    Field_Acres: 8.2
-  },
-  {
-    Owner_Name: 'Bob Vance',
-    Date: '06/01/2018',
-    Spray: "Old Spice",
-    Cost: 4.50,
-    Cost_Unit: 'gal',
-    Usage_Amount: 4.18,
-    Usage_Unit: 'gal',
-    Field_Name: 'Thunder',
-    Field_Acres: 18.4
-  },
-  {
-    Owner_Name: 'Jessica Day',
-    Date: '07/10/2018',
-    Spray: "Axe",
-    Cost: 3.45,
-    Cost_Unit: 'liter',
-    Usage_Amount: 9.1,
-    Usage_Unit: 'liter',
-    Field_Name: 'Liberty',
-    Field_Acres: 24
-  }
-];
 
 class DownloadSheet extends Component {
   componentDidMount() {
@@ -85,7 +42,7 @@ class DownloadSheet extends Component {
         Cost_Unit: d.price_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l',
         Usage_Amount: d.amount,
         Usage_Unit: d.amount_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l',
-        Total_Cost: d.price * d.amount
+        Total_Cost: calculateCost(d.price, d.price_unit, d.amount, d.amount_unit)
       }
     })
 
