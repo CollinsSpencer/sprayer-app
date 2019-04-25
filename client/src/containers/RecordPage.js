@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap'
 import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
+import FieldSeasonForm from '../components/FieldSeasonForm';
 import SprayForm from '../components/SprayForm'
 import SprayBar from '../components/SprayBar'
 import {
@@ -54,6 +55,7 @@ class RecordPage extends Component {
               {fieldSelector}
             </Col>
           </Form.Row>
+          <FieldSeasonForm></FieldSeasonForm>
           <SprayForm></SprayForm>
           <Form.Row>
             <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

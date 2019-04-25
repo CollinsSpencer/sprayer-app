@@ -50,7 +50,7 @@ const mapStateToProps = (state) => {
     options: owners.map(owner => {
       return { label: owner.name, value: owner.uuid }
     }),
-    selectedOwner: selectedOwner,
+    selectedOwner,
   }
 }
 

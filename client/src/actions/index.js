@@ -16,6 +16,14 @@ export const FIELDS_ADD_ROLLBACK = 'FIELDS_ADD_ROLLBACK'
 export const FIELDS_FETCH_REQUEST = 'FIELDS_FETCH_REQUEST'
 export const FIELDS_FETCH_COMMIT = 'FIELDS_FETCH_COMMIT'
 export const FIELDS_FETCH_ROLLBACK = 'FIELDS_FETCH_ROLLBACK'
+export const FIELDSEASON_SET = 'FIELDSEASON_SET'
+export const FIELDSEASON_END_DATE_SET = 'FIELDSEASON_END_DATE_SET'
+export const FIELDSEASON_START_DATE_SET = 'FIELDSEASON_START_DATE_SET'
+export const FIELDSEASON_CROP_TYPE_SET = 'FIELDSEASON_CROP_TYPE_SET'
+export const FIELDSEASON_NUMBER_OF_ACRES_SET = 'FIELDSEASON_NUMBER_OF_ACRES_SET'
+export const FIELDSEASONS_ADD_REQUEST = 'FIELDSEASONS_ADD_REQUEST'
+export const FIELDSEASONS_ADD_COMMIT = 'FIELDSEASONS_ADD_COMMIT'
+export const FIELDSEASONS_ADD_ROLLBACK = 'FIELDSEASONS_ADD_ROLLBACK'
 export const FIELDSEASONS_FETCH_REQUEST = 'FIELDSEASONS_FETCH_REQUEST'
 export const FIELDSEASONS_FETCH_COMMIT = 'FIELDSEASONS_FETCH_COMMIT'
 export const FIELDSEASONS_FETCH_ROLLBACK = 'FIELDSEASONS_FETCH_ROLLBACK'
@@ -104,8 +112,8 @@ const receiveLogout = () => ({
 
 export const setAmountUnits = (units) => ({ type: AMOUNT_UNITS_SET, units })
 export const setAmountValue = (value) => ({ type: AMOUNT_VALUE_SET, value })
-export const setField = (id) => ({ type: FIELD_SET, id: id })
-export const addField = (field_name) => ({
+export const setField = (field) => ({ type: FIELD_SET, payload: field })
+export const addField = (field_name, owner) => ({
   [CALL_API]: {
     authenticated: true,
     endpoint: 'fields/',
@@ -113,8 +121,7 @@ export const addField = (field_name) => ({
     json: {
       uuid: uuidv4(),
       name: field_name,
-      owner: 'http://localhost:8000/api/owners/1/', // TODO
-      user: 'http://localhost:8000/api/users/1/', // TODO
+      owner,
     },
     types: [FIELDS_ADD_REQUEST, FIELDS_ADD_COMMIT, FIELDS_ADD_ROLLBACK],
   }
@@ -126,6 +133,27 @@ export const fetchFields = () => ({
     method: 'GET',
     payload: [],
     types: [FIELDS_FETCH_REQUEST, FIELDS_FETCH_COMMIT, FIELDS_FETCH_ROLLBACK],
+  }
+})
+export const setFieldSeason = (fieldSeason) => ({ type: FIELDSEASON_SET, fieldSeason: fieldSeason })
+export const setFieldSeasonCropType = (crop_type) => ({ type: FIELDSEASON_CROP_TYPE_SET, payload: crop_type })
+export const setFieldSeasonNumberOfAcres = (num_acres) => ({ type: FIELDSEASON_NUMBER_OF_ACRES_SET, payload: num_acres })
+export const setFieldSeasonStartDate = (start_date) => ({ type: FIELDSEASON_START_DATE_SET, payload: start_date })
+export const setFieldSeasonEndDate = (end_date) => ({ type: FIELDSEASON_END_DATE_SET, payload: end_date })
+export const addFieldSeason = (crop_type, num_acres, start_date, end_date, field) => ({
+  [CALL_API]: {
+    authenticated: true,
+    endpoint: 'field-seasons/',
+    method: 'POST',
+    json: {
+      uuid: uuidv4(),
+      crop_type,
+      num_acres,
+      start_date,
+      end_date,
+      field,
+    },
+    types: [FIELDSEASONS_ADD_REQUEST, FIELDSEASONS_ADD_COMMIT, FIELDSEASONS_ADD_ROLLBACK],
   }
 })
 export const fetchFieldSeasons = () => ({

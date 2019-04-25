@@ -6,57 +6,114 @@ import {
   Col,
   Form,
 } from 'react-bootstrap'
-import { DatePicker } from 'react-bootstrap-date-picker'
+import DatePicker from 'react-datepicker'
+import Select from 'react-select';
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 import {
-  addNewFieldSeason,
-  setEndDate,
-  setNumberOfAcres,
-  setStartDate,
+  addFieldSeason,
+  fetchFieldSeasons,
+  setFieldSeason,
+  setFieldSeasonCropType,
+  setFieldSeasonNumberOfAcres,
+  setFieldSeasonStartDate,
+  setFieldSeasonEndDate,
 } from '../actions'
 
 class FieldSeasonForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { inFormMode: false };
+  }
+  componentDidMount() {
+    this.props.fetchFieldSeasons()
+  }
   render() {
     const {
-      addNewFieldSeason,
-      setEndDate,
-      setNumberOfAcres,
-      setStartDate,
+      addFieldSeason,
+      field,
+      fieldSeason,
+      fieldSeasons,
+      fieldSeasonsOptions,
+      setFieldSeason,
+      setFieldSeasonCropType,
+      setFieldSeasonNumberOfAcres,
+      setFieldSeasonStartDate,
+      setFieldSeasonEndDate,
     } = this.props
     const {
-      cropType,
-      endDate,
-      numberOfAcres,
-      startDate,
-    } = this.props.fieldSeason
+      crop_type,
+      end_date,
+      num_acres,
+      start_date,
+    } = fieldSeason
 
-    const handleStartDateChange = (date) => {
-      setStartDate(date)
-    }
-    const handleEndDateChange = (date) => {
-      setEndDate(date)
+    const startDate = new Date(new Date(start_date).getTime() + (new Date().getTimezoneOffset() * 60000))
+    const endDate = new Date(new Date(end_date).getTime() + (new Date().getTimezoneOffset() * 60000))
+
+    const handleSetFieldSeason = (newValue) => {
+      const fs = fieldSeasons.find(fs => fs.uuid === newValue.value)
+      setFieldSeason(fs)
     }
     const handleNumberOfAcresChange = (event) => {
-      setNumberOfAcres(event.target.val)
+      setFieldSeasonNumberOfAcres(event.target.val)
+    }
+    const handleCropTypeChange = (event) => {
+      setFieldSeasonCropType(event.target.val)
+    }
+    const handleStartDateChange = (date) => {
+      let dateString = date.toString()
+      if (date instanceof Date) {
+        dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10)
+      }
+      setFieldSeasonStartDate(dateString)
+    }
+    const handleEndDateChange = (date) => {
+      let dateString = date.toString()
+      if (date instanceof Date) {
+        dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10)
+      }
+      setFieldSeasonEndDate(dateString)
     }
     const handleSubmitCreateFieldSeason = (event) => {
       event.preventDefault();
-      addNewFieldSeason(cropType, endDate, numberOfAcres, startDate);
-      this.setState({inFormMode: false})
+      addFieldSeason(crop_type, num_acres, startDate, endDate, field);
+      this.setState({ inFormMode: false })
+    }
+
+    let fieldSeasonSelector = null
+    if (fieldSeasonsOptions.length > 0) {
+      fieldSeasonSelector = (
+        <div>
+          <Form.Label>Select Existing Season Information for Field</Form.Label>
+          <Select
+            className="basic-single"
+            classNamePrefix="select"
+            defaultValue={fieldSeasonsOptions[0]}
+            name="fieldSeasons"
+            options={fieldSeasonsOptions}
+            onChange={handleSetFieldSeason}
+          />
+        </div>
+      )
+    } else {
+      fieldSeasonSelector = null
     }
 
     let fieldSeasonCreator = null
     if (this.state.inFormMode) {
-      fieldSeasonCreate = (
+      fieldSeasonCreator = (
         <div>
           <Form.Row>
             <Col>
               <Form.Label>Number of Acres</Form.Label>
               <Form.Control
                 type="tel"
-                value={numberOfAcres}
-                onChangeEvent={handleNumberOfAcresChange}
+                value={num_acres}
+                onChange={handleNumberOfAcresChange}
                 selectAllOnFocus={true}
+                pattern="^\d*\.?\d*$"
               />
             </Col>
             <Col>
@@ -67,21 +124,35 @@ class FieldSeasonForm extends Component {
           <Form.Row>
             <Col>
               <Form.Label>Start Date</Form.Label>
-              <DatePicker
-                id="start-date-picker"
-                value={startDate}
-                maxDate={endDate}
-                onChange={handleStartDateChange}
-              />
+              <div>
+                <DatePicker
+                  id="start-date-picker"
+                  className="form-control"
+                  selectsStart
+                  selected={startDate}
+                  startDate={startDate}
+                  endDate={endDate}
+                  maxDate={endDate}
+                  dateFormat="yyyy-MM-dd"
+                  onChange={handleStartDateChange}
+                />
+              </div>
             </Col>
             <Col>
               <Form.Label>End Date</Form.Label>
-              <DatePicker
-                id="end-date-picker"
-                value={endDate}
-                minDate={startDate}
-                onChange={handleEndDateChange}
-              />
+              <div>
+                <DatePicker
+                  id="end-date-picker"
+                  className="form-control"
+                  selectsEnd
+                  selected={endDate}
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  dateFormat="yyyy-MM-dd"
+                  onChange={handleEndDateChange}
+                />
+              </div>
             </Col>
           </Form.Row>
           <Form.Row>
@@ -90,9 +161,7 @@ class FieldSeasonForm extends Component {
                 type="submit"
                 variant="primary"
                 onClick={handleSubmitCreateFieldSeason}
-              >
-                Save Season Information for Field
-            </Button>
+              >Save New Season Information for Field</Button>
             </Col>
           </Form.Row>
         </div>
@@ -100,10 +169,10 @@ class FieldSeasonForm extends Component {
     } else {
       fieldSeasonCreator = (
         <div>
-          <Button 
+          <Button
             variant="secondary"
-            onClick={this.setState({inFormMode: true})}
-          />
+            onClick={() => this.setState({ inFormMode: true })}
+          >Add New Season Information for Field</Button>
         </div>
       )
     }
@@ -112,10 +181,11 @@ class FieldSeasonForm extends Component {
       <div>
         <Form.Row>
           <Col>
-            <h3>Field Season Information</h3>
+            <h4>Field Season Information</h4>
           </Col>
         </Form.Row>
         {/* If there is already a field season already created for the selected field, create a dropdown */}
+        {fieldSeasonSelector}
         {/* Display a button that allows the user to enter new field season information */}
         {fieldSeasonCreator}
       </div>
@@ -124,17 +194,26 @@ class FieldSeasonForm extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { fieldSeason } = state
+  const { field, fieldSeason, fieldSeasons } = state
   return {
+    field,
     fieldSeason,
+    fieldSeasons,
+    fieldSeasonsOptions: fieldSeasons
+      .filter(fs => fs.field.uuid === field.uuid)
+      .map(fs => ({ label: `${fs.num_acres} acres of ${fs.crop_type} from ${fs.start_date} to ${fs.end_date}`, value: fs.uuid })),
+
   }
 }
 
 const mapDispatchToProps = {
-  addNewFieldSeason,
-  setEndDate,
-  setNumberOfAcres,
-  setStartDate,
+  addFieldSeason,
+  fetchFieldSeasons,
+  setFieldSeason,
+  setFieldSeasonCropType,
+  setFieldSeasonNumberOfAcres,
+  setFieldSeasonStartDate,
+  setFieldSeasonEndDate,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FieldSeasonForm))

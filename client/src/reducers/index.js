@@ -9,6 +9,14 @@ import {
   FIELDS_ADD_COMMIT,
   FIELDS_ADD_ROLLBACK,
   FIELDS_FETCH_COMMIT,
+  FIELDSEASON_SET,
+  FIELDSEASON_CROP_TYPE_SET,
+  FIELDSEASON_NUMBER_OF_ACRES_SET,
+  FIELDSEASON_START_DATE_SET,
+  FIELDSEASON_END_DATE_SET,
+  FIELDSEASONS_ADD_REQUEST,
+  FIELDSEASONS_ADD_COMMIT,
+  FIELDSEASONS_ADD_ROLLBACK,
   FIELDSEASONS_FETCH_COMMIT,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -102,7 +110,28 @@ const mode = (state = Modes.SPRAYING, action) => {
 const field = (state = '', action) => {
   switch (action.type) {
     case FIELD_SET:
-      return action.uuid
+      return {
+        ...state,
+        previousField: null,
+        uuid: action.payload.uuid,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case FIELDS_ADD_REQUEST:
+      return {
+        previousField: state,
+        uuid: action.payload.uuid,
+        name: action.payload.name,
+        syncing: true,
+      }
+    case FIELDS_ADD_COMMIT:
+      return {
+        uuid: action.payload.uuid,
+        name: action.payload.name,
+        syncing: false,
+      }
+    case FIELDS_ADD_ROLLBACK:
+      return state.previousField ? state.previousField : ''
     default:
       return state
   }
@@ -118,7 +147,6 @@ const fields = (state = [], action) => {
           name: action.payload.name,
           owner: action.payload.owner,
           syncing: true,
-          user: action.payload.user,
         }
       ]
     case FIELDS_ADD_COMMIT:
@@ -136,8 +164,58 @@ const fields = (state = [], action) => {
   }
 }
 
+const fieldSeason = (state = {}, action) => {
+  switch (action.type) {
+    case FIELDSEASON_SET:
+      return action.fieldSeason
+    case FIELDSEASON_CROP_TYPE_SET:
+      return {
+        ...state,
+        crop_type: action.payload,
+      }
+    case FIELDSEASON_NUMBER_OF_ACRES_SET:
+      return {
+        ...state,
+        num_acres: action.payload,
+      }
+    case FIELDSEASON_START_DATE_SET:
+      return {
+        ...state,
+        start_date: action.payload,
+      }
+    case FIELDSEASON_END_DATE_SET:
+      return {
+        ...state,
+        end_date: action.payload,
+      }
+    default:
+      return state
+  }
+}
+
 const fieldSeasons = (state = [], action) => {
   switch (action.type) {
+    case FIELDSEASONS_ADD_REQUEST:
+      return [
+        ...state,
+        {
+          uuid: action.payload.uuid,
+          crop_type: action.payload.crop_type,
+          num_acres: action.payload.num_acres,
+          start_date: action.payload.start_date,
+          end_date: action.payload.end_date,
+          field: action.payload.field,
+          syncing: true,
+        }
+      ]
+    case FIELDSEASONS_ADD_COMMIT:
+      return [...state].map(f => f.uuid === action.meta.uuid ? {
+        ...f,
+        uuid: action.payload.uuid,
+        syncing: false
+      } : f)
+    case FIELDSEASONS_ADD_ROLLBACK:
+      return [...state].filter(f => f.uuid !== action.meta.uuid)
     case FIELDSEASONS_FETCH_COMMIT:
       return action.payload.results
     default:
@@ -149,12 +227,15 @@ const owner = (state = '', action) => {
   switch (action.type) {
     case OWNER_SET:
       return {
+        ...state,
+        previousOwner: null,
         uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: false,
       }
     case OWNERS_ADD_REQUEST:
       return {
+        previousOwner: state,
         uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: true,
@@ -166,7 +247,7 @@ const owner = (state = '', action) => {
         syncing: false,
       }
     case OWNERS_ADD_ROLLBACK:
-      return ''
+      return state.previousOwner ? state.previousOwner : ''
     default:
       return state
   }
@@ -183,8 +264,6 @@ const owners = (state = [], action) => {
           syncing: true,
         }
       ]
-    case OWNERS_FETCH_COMMIT:
-      return action.payload.results
     case OWNERS_ADD_COMMIT:
       return [...state].map(o => o.uuid === action.meta.uuid ? {
         ...o,
@@ -193,6 +272,8 @@ const owners = (state = [], action) => {
       } : o)
     case OWNERS_ADD_ROLLBACK:
       return [...state].filter(o => o.uuid !== action.meta.uuid)
+    case OWNERS_FETCH_COMMIT:
+      return action.payload.results
     default:
       return state
   }
@@ -298,6 +379,7 @@ const appReducer = combineReducers({
   mode,
   field,
   fields,
+  fieldSeason,
   fieldSeasons,
   owner,
   owners,
