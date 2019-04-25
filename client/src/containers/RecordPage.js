@@ -26,12 +26,7 @@ class RecordPage extends Component {
   }
 
   render() {
-    const { owner } = this.props
-    const fieldSelector = owner ? (
-      <div>
-        <Form.Label>Field</Form.Label>
-        <FieldSelector></FieldSelector>
-      </div>) : null;
+    const { owner, field } = this.props
 
     return (
       <Container>
@@ -52,10 +47,14 @@ class RecordPage extends Component {
               <OwnerSelector></OwnerSelector>
             </Col>
             <Col>
-              {fieldSelector}
+              {owner ? (
+                <div>
+                  <Form.Label>Field</Form.Label>
+                  <FieldSelector></FieldSelector>
+                </div>) : null}
             </Col>
           </Form.Row>
-          <FieldSeasonForm></FieldSeasonForm>
+          {field ? (<FieldSeasonForm></FieldSeasonForm>) : null}
           <SprayForm></SprayForm>
           <Form.Row>
             <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -75,9 +74,10 @@ class RecordPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { amount, fieldSeason, owner, price, spray } = state
+  const { amount, field, fieldSeason, owner, price, spray } = state
   return {
     amount,
+    field,
     fieldSeason,
     owner,
     price,

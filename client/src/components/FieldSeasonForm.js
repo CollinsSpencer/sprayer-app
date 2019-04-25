@@ -180,11 +180,7 @@ class FieldSeasonForm extends Component {
 
     return (
       <div>
-        <Form.Row>
-          <Col>
-            <h4>Field Season Information</h4>
-          </Col>
-        </Form.Row>
+        <h4>Field Season Information</h4>
         {/* If there is already a field season already created for the selected field, create a dropdown */}
         {fieldSeasonSelector}
         {/* Display a button that allows the user to enter new field season information */}

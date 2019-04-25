@@ -40,6 +40,7 @@ class SprayForm extends Component {
 
     return (
       <div>
+        <h4>Chemical Usage Information</h4>
         <Form.Row>
           <Col>
             <Form.Label>Spray</Form.Label>
