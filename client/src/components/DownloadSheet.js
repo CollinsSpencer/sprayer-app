@@ -38,11 +38,11 @@ class DownloadSheet extends Component {
         Field_Name: d.field_season.field.name,
         Field_Acres: d.field_season.num_acres,
         Spray: d.spray.name,
-        Cost: d.price,
+        Cost: d.price/100,
         Cost_Unit: d.price_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l',
         Usage_Amount: d.amount,
         Usage_Unit: d.amount_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l',
-        Total_Cost: calculateCost(d.price, d.price_unit, d.amount, d.amount_unit)
+        Total_Cost: calculateCost(d.price/100, d.price_unit, d.amount, d.amount_unit)
       }
     })
 
