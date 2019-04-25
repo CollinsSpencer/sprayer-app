@@ -21,8 +21,8 @@ import {
 class RecordPage extends Component {
   handleSubmit(e) {
     e.preventDefault()
-    const { amount, price, spray } = this.props
-    this.props.addSprayApplication(amount.value, amount.units, price.value, price.units, spray)
+    const { amount, fieldSeason, price, spray } = this.props
+    this.props.addSprayApplication(amount.value, amount.units, fieldSeason, price.value, price.units, spray)
   }
 
   render() {
@@ -75,11 +75,12 @@ class RecordPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { amount, price, owner, spray } = state
+  const { amount, fieldSeason, owner, price, spray } = state
   return {
     amount,
-    price,
+    fieldSeason,
     owner,
+    price,
     spray,
   }
 }

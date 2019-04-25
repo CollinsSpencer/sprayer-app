@@ -47,6 +47,8 @@ import {
 
 const amount = (state = {}, action) => {
   switch (action.type) {
+    case SPRAYAPPLICATIONS_ADD_COMMIT:
+      return { units: null, value: null }
     case AMOUNT_UNITS_SET:
       return { ...state, units: action.units }
     case AMOUNT_VALUE_SET:
@@ -290,6 +292,8 @@ const owners = (state = [], action) => {
 
 const price = (state = {}, action) => {
   switch (action.type) {
+    case SPRAYAPPLICATIONS_ADD_COMMIT:
+      return { units: null, value: null }
     case PRICE_UNITS_SET:
       return { ...state, units: action.units }
     case PRICE_VALUE_SET:
@@ -301,6 +305,8 @@ const price = (state = {}, action) => {
 
 const spray = (state = '', action) => {
   switch (action.type) {
+    case SPRAYAPPLICATIONS_ADD_COMMIT:
+      return ''
     case SPRAY_SET:
       return {
         uuid: action.payload.uuid,

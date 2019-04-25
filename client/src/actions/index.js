@@ -220,7 +220,7 @@ export const fetchSprays = () => ({
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
-export const addSprayApplication = (amount, amountUnit, price, priceUnit, spray) => {
+export const addSprayApplication = (amount, amount_unit, field_season, price, price_unit, spray) => {
   return {
     [CALL_API]: {
       authenticated: true,
@@ -229,9 +229,10 @@ export const addSprayApplication = (amount, amountUnit, price, priceUnit, spray)
       json: {
         uuid: uuidv4(),
         amount,
-        amountUnit,
-        price,
-        priceUnit,
+        amount_unit,
+        field_season,
+        price: price * 100,
+        price_unit,
         spray,
       },
       types: [SPRAYAPPLICATIONS_ADD_REQUEST, SPRAYAPPLICATIONS_ADD_COMMIT, SPRAYAPPLICATIONS_ADD_ROLLBACK],
