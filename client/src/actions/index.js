@@ -111,7 +111,7 @@ export const addField = (field_name) => ({
     endpoint: 'fields/',
     method: 'POST',
     json: {
-      id: uuidv4(),
+      uuid: uuidv4(),
       name: field_name,
       owner: 'http://localhost:8000/api/owners/1/', // TODO
       user: 'http://localhost:8000/api/users/1/', // TODO
@@ -147,7 +147,7 @@ export const addOwner = (owner_name) => ({
     endpoint: 'owners/',
     method: 'POST',
     json: {
-      id: uuidv4(),
+      uuid: uuidv4(),
       name: owner_name,
     },
     types: [OWNERS_ADD_REQUEST, OWNERS_ADD_COMMIT, OWNERS_ADD_ROLLBACK],
@@ -171,7 +171,7 @@ export const addSpray = (spray_name) => ({
     endpoint: 'sprays/',
     method: 'POST',
     json: {
-      id: uuidv4(),
+      uuid: uuidv4(),
       name: spray_name,
     },
     types: [SPRAYS_ADD_REQUEST, SPRAYS_ADD_COMMIT, SPRAYS_ADD_ROLLBACK],
@@ -186,16 +186,18 @@ export const fetchSprays = () => ({
     types: [SPRAYS_FETCH_REQUEST, SPRAYS_FETCH_COMMIT, SPRAYS_FETCH_ROLLBACK],
   }
 })
-export const addSprayApplication = (cost, amount, spray) => {
+export const addSprayApplication = (amount, amountUnit, cost, costUnit, spray) => {
   return {
     [CALL_API]: {
       authenticated: true,
       endpoint: 'spray-applications/',
       method: 'POST',
       json: {
-        id: uuidv4(),
-        cost,
+        uuid: uuidv4(),
         amount,
+        amountUnit,
+        cost,
+        costUnit,
         spray,
       },
       types: [SPRAYAPPLICATIONS_ADD_REQUEST, SPRAYAPPLICATIONS_ADD_COMMIT, SPRAYAPPLICATIONS_ADD_ROLLBACK],

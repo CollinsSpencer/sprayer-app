@@ -102,7 +102,7 @@ const mode = (state = Modes.SPRAYING, action) => {
 const field = (state = '', action) => {
   switch (action.type) {
     case FIELD_SET:
-      return action.id
+      return action.uuid
     default:
       return state
   }
@@ -114,7 +114,7 @@ const fields = (state = [], action) => {
       return [
         ...state,
         {
-          id: action.payload.id,
+          uuid: action.payload.uuid,
           name: action.payload.name,
           owner: action.payload.owner,
           syncing: true,
@@ -122,13 +122,13 @@ const fields = (state = [], action) => {
         }
       ]
     case FIELDS_ADD_COMMIT:
-      return [...state].map(f => f.id === action.meta.id ? {
+      return [...state].map(f => f.uuid === action.meta.uuid ? {
         ...f,
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         syncing: false
       } : f)
     case FIELDS_ADD_ROLLBACK:
-      return [...state].filter(f => f.id !== action.meta.id)
+      return [...state].filter(f => f.uuid !== action.meta.uuid)
     case FIELDS_FETCH_COMMIT:
       return action.payload.results
     default:
@@ -149,19 +149,19 @@ const owner = (state = '', action) => {
   switch (action.type) {
     case OWNER_SET:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: false,
       }
     case OWNERS_ADD_REQUEST:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: true,
       }
     case OWNERS_ADD_COMMIT:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: false,
       }
@@ -178,7 +178,7 @@ const owners = (state = [], action) => {
       return [
         ...state,
         {
-          id: action.payload.id,
+          uuid: action.payload.uuid,
           name: action.payload.name,
           syncing: true,
         }
@@ -186,13 +186,13 @@ const owners = (state = [], action) => {
     case OWNERS_FETCH_COMMIT:
       return action.payload.results
     case OWNERS_ADD_COMMIT:
-      return [...state].map(o => o.id === action.meta.id ? {
+      return [...state].map(o => o.uuid === action.meta.uuid ? {
         ...o,
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         syncing: false
       } : o)
     case OWNERS_ADD_ROLLBACK:
-      return [...state].filter(o => o.id !== action.meta.id)
+      return [...state].filter(o => o.uuid !== action.meta.uuid)
     default:
       return state
   }
@@ -213,19 +213,19 @@ const spray = (state = '', action) => {
   switch (action.type) {
     case SPRAY_SET:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: false,
       }
     case SPRAYS_ADD_REQUEST:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: true,
       }
     case SPRAYS_ADD_COMMIT:
       return {
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         name: action.payload.name,
         syncing: false,
       }
@@ -244,7 +244,7 @@ const sprays = (state = [], action) => {
       return [
         ...state,
         {
-          id: action.payload.id,
+          uuid: action.payload.uuid,
           name: action.payload.name,
           syncing: true,
         }
@@ -252,15 +252,15 @@ const sprays = (state = [], action) => {
     case SPRAYS_ADD_COMMIT:
       // We want to replace the locally created ID with the ID from the server.
       // Note that we don't direct manipulate `state`!
-      return [...state].map(s => s.id === action.meta.id ? {
+      return [...state].map(s => s.uuid === action.meta.uuid ? {
         ...s,
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         syncing: false
       } : s)
     case SPRAYS_ADD_ROLLBACK:
       // We have decided to stop retrying to sync the data.
       // Remove the item completely from the list.
-      return [...state].filter(s => s.id !== action.meta.id)
+      return [...state].filter(s => s.uuid !== action.meta.uuid)
     default:
       return state
   }
@@ -274,19 +274,19 @@ const sprayApplications = (state = [], action) => {
       return [
         ...state,
         {
-          id: action.payload.id,
+          uuid: action.payload.uuid,
           name: action.payload.name,
           syncing: true,
         }
       ]
     case SPRAYAPPLICATIONS_ADD_COMMIT:
-      return [...state].map(s => s.id === action.meta.id ? {
+      return [...state].map(s => s.uuid === action.meta.uuid ? {
         ...s,
-        id: action.payload.id,
+        uuid: action.payload.uuid,
         syncing: false
       } : s)
     case SPRAYAPPLICATIONS_ADD_ROLLBACK:
-      return [...state].filter(s => s.id !== action.meta.id)
+      return [...state].filter(s => s.uuid !== action.meta.uuid)
     default:
       return state
   }

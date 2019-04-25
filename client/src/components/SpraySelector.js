@@ -20,7 +20,7 @@ class SpraySelector extends Component {
     } else {
       setSpray({
         name: newValue.label,
-        id: newValue.value,
+        uuid: newValue.value,
       })
     }
   }
@@ -44,11 +44,11 @@ const mapStateToProps = (state) => {
   const { spray, sprays } = state
   let selectedSpray = ''
   if (Object.keys(spray).length > 0) {
-    selectedSpray = { label: spray.name, value: spray.id }
+    selectedSpray = { label: spray.name, value: spray.uuid }
   }
   return {
     options: sprays.map(spray => {
-      return { label: spray.name, value: spray.id }
+      return { label: spray.name, value: spray.uuid }
     }),
     selectedSpray: selectedSpray,
   }

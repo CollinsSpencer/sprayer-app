@@ -34,9 +34,9 @@ const mapStateToProps = (state) => {
   const { owner, field, fields } = state
   return {
     options: fields
-      // .reduce(field => field.owner === owner) // TODO
+      .reduce(field => field.owner.uuid === owner.uuid)
       .map(field => {
-        return { label: field.name, value: field.id }
+        return { label: field.name, value: field.uuid }
       }),
     selectedField: field,
   }

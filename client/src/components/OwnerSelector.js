@@ -20,7 +20,7 @@ class OwnerSelector extends Component {
     } else {
       setOwner({
         name: newValue.label,
-        id: newValue.value,
+        uuid: newValue.value,
       })
     }
   }
@@ -44,11 +44,11 @@ const mapStateToProps = (state) => {
   const { owner, owners } = state
   let selectedOwner = ''
   if (Object.keys(owner).length > 0) {
-    selectedOwner = { label: owner.name, value: owner.id }
+    selectedOwner = { label: owner.name, value: owner.uuid }
   }
   return {
     options: owners.map(owner => {
-      return { label: owner.name, value: owner.id }
+      return { label: owner.name, value: owner.uuid }
     }),
     selectedOwner: selectedOwner,
   }
