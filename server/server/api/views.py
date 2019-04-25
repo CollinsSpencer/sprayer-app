@@ -4,7 +4,7 @@ from rest_framework import viewsets
 
 from server.api.serializers import UserSerializer, GroupSerializer, SpraySerializer, SprayApplicationSerializer, \
     OwnerSerializer, FieldSerializer, FieldSeasonSerializer
-from sprayer.models import Spray, SprayApplication, Owner, Field, FieldSeason
+from sprayer.models import Spray, Owner, Field, FieldSeason, SprayApplication
 
 
 class UserViewSet(viewsets.ModelViewSet):
