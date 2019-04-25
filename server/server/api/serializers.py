@@ -106,7 +106,7 @@ class SprayApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SprayApplication
-        fields = ('uuid', 'price', 'amount', 'date', 'spray', 'field_season')
+        fields = ('uuid', 'price', 'price_unit', 'amount', 'amount_unit', 'date', 'spray', 'field_season')
 
     def create(self, validated_data):
         field_season_data = validated_data.get('field_season')
