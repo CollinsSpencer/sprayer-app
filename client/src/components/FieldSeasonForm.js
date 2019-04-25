@@ -179,7 +179,7 @@ class FieldSeasonForm extends Component {
     }
 
     return (
-      <div>
+      <div className="mb-4">
         <h4>Field Season Information</h4>
         {/* If there is already a field season already created for the selected field, create a dropdown */}
         {fieldSeasonSelector}

@@ -41,7 +41,7 @@ class RecordPage extends Component {
             <Col xs={5} md={4}>
             </Col>
           </Form.Row>
-          <Form.Row>
+          <Form.Row className="mb-4">
             <Col>
               <Form.Label>Owner</Form.Label>
               <OwnerSelector></OwnerSelector>
