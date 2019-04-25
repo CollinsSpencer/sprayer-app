@@ -18,7 +18,7 @@ class UnitSelector extends Component {
     this.props.callbackAction(selectedOption.value)
   }
   render() {
-    const selectedValue = units.find(u => u.value === this.props.selectedValue)
+    const selectedValue = this.props.selectedValue ? units.find(u => u.value === this.props.selectedValue) : null
     return (
       <div>
         <Select
