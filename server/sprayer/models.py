@@ -25,9 +25,6 @@ class Owner(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        unique_together = ('name', 'user',)
-
 
 class Field(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.PROTECT)
