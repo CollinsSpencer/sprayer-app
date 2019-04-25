@@ -32,15 +32,14 @@ class SpraySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Spray
-        fields = ('id', 'name', 'user')
+        fields = ('uuid', 'name', 'user')
 
 
 class SprayApplicationSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
 
     class Meta:
         model = SprayApplication
-        fields = ('cost', 'amount', 'date', 'spray', 'field_season')
+        fields = ('uuid', 'cost', 'amount', 'date', 'spray', 'field_season')
 
 
 class OwnerSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,11 +55,10 @@ class OwnerSerializer(serializers.HyperlinkedModelSerializer):
 
 class FieldSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer()
-    id = serializers.ReadOnlyField()
 
     class Meta:
         model = Field
-        fields = ('id', 'name', 'owner')
+        fields = ('uuid', 'name', 'owner')
 
     def create(self, validated_data):
         owner_data = validated_data.pop('owner')
@@ -76,8 +74,7 @@ class FieldSerializer(serializers.ModelSerializer):
 
 
 class FieldSeasonSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
 
     class Meta:
         model = FieldSeason
-        fields = ('crop_type', 'num_acres', 'start_date', 'end_date', 'field')
+        fields = ('uuid', 'crop_type', 'num_acres', 'start_date', 'end_date', 'field')
