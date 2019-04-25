@@ -136,4 +136,5 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
+    'localhost:4000',
 )

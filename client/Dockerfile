@@ -11,6 +11,7 @@ RUN yarn
 COPY . .
 
 EXPOSE 3000
+EXPOSE 4000
 EXPOSE 35729
 
 CMD yarn start
