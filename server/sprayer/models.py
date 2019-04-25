@@ -13,6 +13,9 @@ class Spray(models.Model):
     class Meta:
         unique_together = ('name', 'user',)
 
+    def __str__(self):
+        return self.name
+
 
 class Owner(models.Model):
     name = models.CharField(max_length=50)
@@ -31,6 +34,9 @@ class Field(models.Model):
     name = models.CharField(max_length=50)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class FieldSeason(models.Model):
     CROP_TYPES = (
@@ -47,7 +53,7 @@ class FieldSeason(models.Model):
 
 
 class SprayApplication(models.Model):
-    cost = models.IntegerField()  # In cents
+    price = models.IntegerField()  # In cents
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True, editable=False)
     spray = models.ForeignKey(Spray, on_delete=models.PROTECT)
