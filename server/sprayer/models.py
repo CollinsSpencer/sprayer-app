@@ -47,8 +47,16 @@ class FieldSeason(models.Model):
 
 
 class SprayApplication(models.Model):
+    UNIT_TYPES = (
+        ('OUNCES', 'Ounces'),
+        ('GALLONS', 'Gallons'),
+        ('LITERS', 'Liters'),
+    )
+
     price = models.IntegerField()  # In cents
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    price_unit = models.CharField(choices=UNIT_TYPES, max_length=7)  # In cents
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount_unit = models.CharField(max_length=8, choices=UNIT_TYPES)
     date = models.DateTimeField(auto_now_add=True, editable=False)
     spray = models.ForeignKey(Spray, on_delete=models.PROTECT)
     field_season = models.ForeignKey(FieldSeason, on_delete=models.PROTECT)
