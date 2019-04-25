@@ -34,10 +34,9 @@ class SpraySerializer(serializers.ModelSerializer):
 
 
 class SprayApplicationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = SprayApplication
-        fields = ('uuid', 'cost', 'amount', 'date', 'spray', 'field_season')
+        fields = ('uuid', 'price', 'amount', 'date', 'spray', 'field_season')
 
 
 class OwnerSerializer(serializers.ModelSerializer):
@@ -53,6 +52,7 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class FieldSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer()
+    uuid = serializers.UUIDField(required=False)
 
     class Meta:
         model = Field
@@ -72,7 +72,32 @@ class FieldSerializer(serializers.ModelSerializer):
 
 
 class FieldSeasonSerializer(serializers.ModelSerializer):
+    field = FieldSerializer()
+    uuid = serializers.UUIDField(required=False)
 
     class Meta:
         model = FieldSeason
         fields = ('uuid', 'crop_type', 'num_acres', 'start_date', 'end_date', 'field')
+
+    def create(self, validated_data):
+        field_data = validated_data.get('field')
+        owner_data = field_data.get('owner')
+        owner, created = Owner.objects.get_or_create(
+            uuid=owner_data['uuid'],
+            defaults={
+                'name': owner_data['name'],
+                'user': owner_data['user'],
+            }
+        )
+
+        field, created = Field.objects.get_or_create(
+            uuid=field_data['uuid'],
+            defaults={
+                'owner': owner,
+                'name': field_data['name'],
+            }
+        )
+
+        validated_data.pop('field')
+        instance = FieldSeason.objects.create(**validated_data, field=field)
+        return instance
