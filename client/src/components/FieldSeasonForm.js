@@ -8,9 +8,9 @@ import {
 } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import Select from 'react-select';
-
 import 'react-datepicker/dist/react-datepicker.css'
 
+import CropTypeSelector from '../components/CropTypeSelector'
 import {
   addFieldSeason,
   fetchFieldSeasons,
@@ -20,6 +20,7 @@ import {
   setFieldSeasonStartDate,
   setFieldSeasonEndDate,
 } from '../actions'
+import { convertDateToServerFormat } from '../utilities'
 
 class FieldSeasonForm extends Component {
   constructor(props) {
@@ -57,28 +58,25 @@ class FieldSeasonForm extends Component {
       setFieldSeason(fs)
     }
     const handleNumberOfAcresChange = (event) => {
-      setFieldSeasonNumberOfAcres(event.target.val)
+      const val = event.target.value
+      if (event.target.validity.valid) {
+        setFieldSeasonNumberOfAcres(val)
+      }
     }
-    const handleCropTypeChange = (event) => {
-      setFieldSeasonCropType(event.target.val)
+    const handleCropTypeChange = (type) => {
+      setFieldSeasonCropType(type)
     }
     const handleStartDateChange = (date) => {
-      let dateString = date.toString()
-      if (date instanceof Date) {
-        dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10)
-      }
+      let dateString = convertDateToServerFormat(date)
       setFieldSeasonStartDate(dateString)
     }
     const handleEndDateChange = (date) => {
-      let dateString = date.toString()
-      if (date instanceof Date) {
-        dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10)
-      }
+      let dateString = convertDateToServerFormat(date)
       setFieldSeasonEndDate(dateString)
     }
     const handleSubmitCreateFieldSeason = (event) => {
       event.preventDefault();
-      addFieldSeason(crop_type, num_acres, startDate, endDate, field);
+      addFieldSeason(crop_type, num_acres, start_date, end_date, field);
       this.setState({ inFormMode: false })
     }
 
@@ -90,10 +88,10 @@ class FieldSeasonForm extends Component {
           <Select
             className="basic-single"
             classNamePrefix="select"
-            defaultValue={fieldSeasonsOptions[0]}
             name="fieldSeasons"
             options={fieldSeasonsOptions}
             onChange={handleSetFieldSeason}
+            placeholder="Select..."
           />
         </div>
       )
@@ -118,7 +116,10 @@ class FieldSeasonForm extends Component {
             </Col>
             <Col>
               <Form.Label>Crop Type</Form.Label>
-              {/* <CropTypeSelector></CropTypeSelector> */}
+              <CropTypeSelector
+                callbackAction={handleCropTypeChange}
+                selectedValue={crop_type}
+              ></CropTypeSelector>
             </Col>
           </Form.Row>
           <Form.Row>

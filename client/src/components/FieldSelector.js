@@ -14,14 +14,11 @@ class FieldSelector extends Component {
     this.props.fetchFields()
   }
   changeHandler = (newValue, action) => {
-    const { addField, owner, setField } = this.props
+    const { addField, fields, owner, setField } = this.props
     if (action.action === 'create-option') {
       addField(newValue.label, owner)
     } else {
-      setField({
-        name: newValue.label,
-        uuid: newValue.value,
-      })
+      setField(fields.find(f => f.uuid === newValue.value))
     }
   }
   render() {
@@ -46,6 +43,7 @@ const mapStateToProps = (state) => {
     selectedField = { label: field.name, value: field.uuid }
   }
   return {
+    fields,
     options: fields
       .filter(field => field.owner.uuid === owner.uuid)
       .map(field => ({ label: field.name, value: field.uuid })),

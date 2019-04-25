@@ -73,6 +73,12 @@ export const Units = {
   LITERS: 'LITERS',
 }
 
+export const CropTypes = {
+  CORN: 'CORN',
+  BEANS: 'BEANS',
+  KALE: 'KALE',
+}
+
 /*
  * private action creators
  */

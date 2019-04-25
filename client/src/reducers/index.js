@@ -109,12 +109,16 @@ const mode = (state = Modes.SPRAYING, action) => {
 
 const field = (state = '', action) => {
   switch (action.type) {
+    case OWNER_SET:
+    case OWNERS_ADD_COMMIT:
+      return ''
     case FIELD_SET:
       return {
         ...state,
         previousField: null,
         uuid: action.payload.uuid,
         name: action.payload.name,
+        owner: action.payload.owner,
         syncing: false,
       }
     case FIELDS_ADD_REQUEST:
@@ -122,12 +126,14 @@ const field = (state = '', action) => {
         previousField: state,
         uuid: action.payload.uuid,
         name: action.payload.name,
+        owner: action.payload.owner,
         syncing: true,
       }
     case FIELDS_ADD_COMMIT:
       return {
         uuid: action.payload.uuid,
         name: action.payload.name,
+        owner: action.payload.owner,
         syncing: false,
       }
     case FIELDS_ADD_ROLLBACK:
@@ -166,6 +172,9 @@ const fields = (state = [], action) => {
 
 const fieldSeason = (state = {}, action) => {
   switch (action.type) {
+    case FIELD_SET:
+    case FIELDS_ADD_COMMIT:
+      return {}
     case FIELDSEASON_SET:
       return action.fieldSeason
     case FIELDSEASON_CROP_TYPE_SET:

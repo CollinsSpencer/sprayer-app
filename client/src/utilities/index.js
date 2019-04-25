@@ -30,3 +30,11 @@ export const priceConverter = (priceValue, priceUnits) => {
       return priceValue
   }
 }
+
+export const convertDateToServerFormat = (date) => {
+  let dateString = date.toString()
+  if (date instanceof Date) {
+    dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)
+  }
+  return dateString
+}
