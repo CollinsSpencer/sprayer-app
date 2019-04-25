@@ -12,7 +12,8 @@ class DisplayData extends Component {
         <td>{this.props.data.Field_Acres}</td>
         <td>{this.props.data.Spray}</td>
         <td>{this.props.data.Usage_Amount} {this.props.data.Usage_Unit}</td>
-        <td>{this.props.data.Cost} per {this.props.data.Cost_Unit}</td>
+        <td>${this.props.data.Cost} per {this.props.data.Cost_Unit}</td>
+        <td>${(this.props.data.Cost * this.props.data.Usage_Amount).toFixed(2)}</td>
       </tr>
     )
   }

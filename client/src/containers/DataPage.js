@@ -97,6 +97,7 @@ class DataPage extends Component {
                 <th>Spray</th>
                 <th>Usage</th>
                 <th>Cost</th>
+                <th>Total Cost</th>
               </tr>
             </thead>
             <tbody>
@@ -110,11 +111,10 @@ class DataPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
-  //TODO- parse this
-  const { fieldSeasons, fields, owners, sprayApplications, sprays } = state
+  const { sprayApplications } = state
+  console.log(sprayApplications)
   return {
-    dataSet: fieldSeasons
+    dataSet: sprayApplications
   }
 }
 
