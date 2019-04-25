@@ -11,14 +11,18 @@ import {
 } from 'react-bootstrap'
 import OwnerSelector from '../components/OwnerSelector'
 import FieldSelector from '../components/FieldSelector'
+import FieldSeasonForm from '../components/FieldSeasonForm';
 import SprayForm from '../components/SprayForm'
 import SprayBar from '../components/SprayBar'
-
+import {
+  addSprayApplication,
+} from '../actions'
 
 class RecordPage extends Component {
-  handleClick(e) {
+  handleSubmit(e) {
     e.preventDefault()
-    // this.props.addSprayApplication() // TODO
+    const { amount, fieldSeason, price, spray } = this.props
+    this.props.addSprayApplication(amount.value, amount.units, fieldSeason, price.value, price.units, spray)
   }
 
   render() {
@@ -51,13 +55,14 @@ class RecordPage extends Component {
               {fieldSelector}
             </Col>
           </Form.Row>
+          <FieldSeasonForm></FieldSeasonForm>
           <SprayForm></SprayForm>
           <Form.Row>
             <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
                 type="submit"
                 variant="primary"
-                onClick={(event) => this.handleClick(event)}
+                onClick={(event) => this.handleSubmit(event)}
               >
                 Submit
               </Button>
@@ -70,14 +75,18 @@ class RecordPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { owner } = state
+  const { amount, fieldSeason, owner, price, spray } = state
   return {
+    amount,
+    fieldSeason,
     owner,
+    price,
+    spray,
   }
 }
 
 const mapDispatchToProps = {
-  // addSprayApplication,
+  addSprayApplication,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RecordPage))

@@ -16,7 +16,7 @@ import {
   setPriceValue,
 } from '../actions'
 
-class RecordForm extends Component {
+class SprayForm extends Component {
   render() {
     const {
       amountUnits,
@@ -77,7 +77,7 @@ class RecordForm extends Component {
             />
           </Col>
           <Col>
-            <Form.Label>Per Unit</Form.Label>
+            <Form.Label>In Units</Form.Label>
             <UnitSelector
               callbackAction={setAmountUnits}
               selectedValue={amountUnits}
@@ -106,4 +106,4 @@ const mapDispatchToProps = {
   setPriceValue,
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RecordForm))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SprayForm))

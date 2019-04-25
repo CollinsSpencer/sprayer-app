@@ -9,19 +9,25 @@ import {
   setField,
 } from '../actions'
 
-
 class FieldSelector extends Component {
   componentDidMount() {
     this.props.fetchFields()
   }
+  changeHandler = (newValue, action) => {
+    const { addField, fields, owner, setField } = this.props
+    if (action.action === 'create-option') {
+      addField(newValue.label, owner)
+    } else {
+      setField(fields.find(f => f.uuid === newValue.value))
+    }
+  }
   render() {
-    const { options, selectedField, addField, setField } = this.props
+    const { options, selectedField } = this.props
     return (
       <div>
         <CreatableSelect
           options={options}
-          onChange={setField}
-          onCreateOption={addField}
+          onChange={this.changeHandler}
           value={selectedField}
           placeholder="Select Field"
         />
@@ -32,13 +38,17 @@ class FieldSelector extends Component {
 
 const mapStateToProps = (state) => {
   const { owner, field, fields } = state
+  let selectedField = ''
+  if (Object.keys(field).length > 0) {
+    selectedField = { label: field.name, value: field.uuid }
+  }
   return {
+    fields,
     options: fields
-      // .reduce(field => field.owner === owner) // TODO
-      .map(field => {
-        return { label: field.name, value: field.id }
-      }),
-    selectedField: field,
+      .filter(field => field.owner.uuid === owner.uuid)
+      .map(field => ({ label: field.name, value: field.uuid })),
+    owner,
+    selectedField,
   }
 }
 
