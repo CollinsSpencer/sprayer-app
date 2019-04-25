@@ -10,9 +10,6 @@ class Spray(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
 
-    class Meta:
-        unique_together = ('name', 'user',)
-
     def __str__(self):
         return self.name
 
