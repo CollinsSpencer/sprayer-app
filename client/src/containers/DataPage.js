@@ -18,53 +18,6 @@ import {
   fetchSprays
 } from '../actions'
 
-const dataSet = [
-  {
-    Owner_Name: 'Ron Swanson',
-    Date: '07/21/2018',
-    Spray: "Old Spice",
-    Cost: 4.50,
-    Cost_Unit: 'gal',
-    Usage_Amount: 1.04,
-    Usage_Unit: 'gal',
-    Field_Name: 'Thunder',
-    Field_Acres: 15
-  },
-  {
-    Owner_Name: 'Ron Swanson',
-    Date: '07/22/2018',
-    Spray: "Dove",
-    Cost: 1.20,
-    Cost_Unit: 'oz',
-    Usage_Amount: 12.04,
-    Usage_Unit: 'oz',
-    Field_Name: 'Grassy Boi',
-    Field_Acres: 8.2
-  },
-  {
-    Owner_Name: 'Bob Vance',
-    Date: '06/01/2018',
-    Spray: "Old Spice",
-    Cost: 4.50,
-    Cost_Unit: 'gal',
-    Usage_Amount: 4.18,
-    Usage_Unit: 'gal',
-    Field_Name: 'Thunder',
-    Field_Acres: 18.4
-  },
-  {
-    Owner_Name: 'Jessica Day',
-    Date: '07/10/2018',
-    Spray: "Axe",
-    Cost: 3.45,
-    Cost_Unit: 'liter',
-    Usage_Amount: 9.1,
-    Usage_Unit: 'liter',
-    Field_Name: 'Liberty',
-    Field_Acres: 24
-  }
-];
-
 class DataPage extends Component {
   componentDidMount() {
     const { fetchFieldSeasons, fetchFields, fetchOwners, fetchSprayApplications } = this.props
@@ -75,6 +28,8 @@ class DataPage extends Component {
     fetchSprayApplications()
   }
   render() {
+    const { dataSet } = this.props
+    console.log(dataSet)
     const displaySet = dataSet.map((d, i) => <DisplayData key={i} data={d} />)
 
     return (
@@ -97,6 +52,7 @@ class DataPage extends Component {
                 <th>Spray</th>
                 <th>Usage</th>
                 <th>Cost</th>
+                <th>Total Cost</th>
               </tr>
             </thead>
             <tbody>
@@ -110,11 +66,9 @@ class DataPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
-  //TODO- parse this
-  const { fieldSeasons, fields, owners, sprayApplications, sprays } = state
+  const { sprayApplications } = state
   return {
-    dataSet: fieldSeasons
+    dataSet: sprayApplications,
   }
 }
 

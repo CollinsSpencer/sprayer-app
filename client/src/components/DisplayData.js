@@ -6,13 +6,14 @@ class DisplayData extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.data.Owner_Name}</td>
-        <td>{this.props.data.Date}</td>
-        <td>{this.props.data.Field_Name}</td>
-        <td>{this.props.data.Field_Acres}</td>
-        <td>{this.props.data.Spray}</td>
-        <td>{this.props.data.Usage_Amount} {this.props.data.Usage_Unit}</td>
-        <td>{this.props.data.Cost} per {this.props.data.Cost_Unit}</td>
+        <td>{this.props.data.field_season.field.owner.name}</td>
+        <td>{this.props.data.date.substr(0,10)}</td>
+        <td>{this.props.data.field_season.field.name}</td>
+        <td>{this.props.data.field_season.num_acres}</td>
+        <td>{this.props.data.spray.name}</td>
+        <td>{this.props.data.amount} {this.props.data.amount_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l'}</td>
+        <td>${(this.props.data.price).toFixed(2)} per {this.props.data.price_unit == 'GALLONS' ? 'gal' : 'OUNCES' ? 'oz' : 'l'}</td>
+        <td>${(this.props.data.price * this.props.data.amount).toFixed(2)}</td>
       </tr>
     )
   }
