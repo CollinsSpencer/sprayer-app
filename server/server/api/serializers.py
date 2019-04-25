@@ -59,14 +59,15 @@ class FieldSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'name', 'owner')
 
     def create(self, validated_data):
-        owner_data = validated_data.pop('owner')
-        if 'uuid' in owner_data.keys():
-            if Owner.objects.filter(uuid=owner_data['uuid']).exists():
-                owner = Owner.objects.get(uuid=owner_data['uuid'], user=owner_data['user'])
-            else:
-                owner = Owner.objects.create(name=owner_data['name'], user=owner_data['user'])
-        else:
-            owner = Owner.objects.create(name=owner_data['name'], user=owner_data['user'])
+        owner_data = validated_data.get('owner')
+        owner, created = Owner.objects.get_or_create(
+            uuid=owner_data['uuid'],
+            defaults={
+                'name': owner_data['name'],
+                'user': owner_data['user'],
+            }
+        )
+        validated_data.pop('owner')
         instance = Field.objects.create(**validated_data, owner=owner)
         return instance
 
