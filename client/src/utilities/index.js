@@ -1,6 +1,6 @@
 import { Units } from '../actions'
 /*
- * Amount in units needs to be converted to amount in ounces
+ * Amount in units converted to amount in ounces
  */
 export const amountConverter = (amountValue, amountUnits) => {
   switch (amountUnits) {
@@ -16,7 +16,7 @@ export const amountConverter = (amountValue, amountUnits) => {
 }
 
 /*
- * Price per unit needs to be converted to price per ounce
+ * Price per unit converted to price per ounce
  */
 export const priceConverter = (priceValue, priceUnits) => {
   switch (priceUnits) {
@@ -28,6 +28,37 @@ export const priceConverter = (priceValue, priceUnits) => {
       return priceValue
     default:
       return priceValue
+  }
+}
+
+export const calculateCost = (price, priceUnit, amount, amountUnit) => {
+  if (priceUnit === amountUnit) {
+    return (price * amount).toFixed(2);
+  }
+  else {
+    switch (priceUnit) {
+      case "GALLONS":
+        price /= 128
+        break;
+      case "LITERS":
+        price /= 33.814022
+        break;
+      case "OUNCES":
+      default:
+        break;
+    }
+    switch (amountUnit) {
+      case "GALLONS":
+        amount *= 128
+        break;
+      case "LITERS":
+        amount *= 33.814022
+        break;
+      case "OUNCES":
+      default:
+        break;
+    }
+    return (price * amount).toFixed(2);
   }
 }
 
