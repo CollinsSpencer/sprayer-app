@@ -32,18 +32,19 @@ export const priceConverter = (priceValue, priceUnits) => {
 }
 
 export const calculateCost = (price, priceUnit, amount, amountUnit) => {
-  if(priceUnit == amountUnit) {
+  if (priceUnit === amountUnit) {
     return (price * amount).toFixed(2);
   }
   else {
     switch (priceUnit) {
       case "GALLONS":
-        price *= 128
+        price /= 128
         break;
       case "LITERS":
-        price *= 33.814022
+        price /= 33.814022
         break;
       case "OUNCES":
+      default:
         break;
     }
     switch (amountUnit) {
@@ -54,6 +55,7 @@ export const calculateCost = (price, priceUnit, amount, amountUnit) => {
         amount *= 33.814022
         break;
       case "OUNCES":
+      default:
         break;
     }
     return (price * amount).toFixed(2);
